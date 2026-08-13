@@ -1,0 +1,2069 @@
+{
+  "business": {
+    "id": "b1",
+    "name": "Sharma Kirana & General Store",
+    "owner": "Rajesh Sharma",
+    "phone": "+91 98765 43210",
+    "address": "Shop No. 14, Main Market, Sector 5, New Delhi",
+    "upiId": "9876543210@paytm",
+    "gstin": "07AAAAA0000A1Z5",
+    "createdDate": "2026-08-09T09:51:59.560Z"
+  },
+  "books": [
+    {
+      "id": "book_1",
+      "name": "Main Shop Khata",
+      "isDefault": true
+    }
+  ],
+  "customers": [
+    {
+      "id": "cust_101",
+      "bookId": "book_1",
+      "name": "Ramesh Kumar",
+      "phone": "+91 98123 45678",
+      "address": "House #42, Gali No 3",
+      "type": "customer",
+      "creditLimit": 10000,
+      "createdDate": "2026-08-01T10:30:00.000Z",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+    },
+    {
+      "id": "cust_102",
+      "bookId": "book_1",
+      "name": "Sunita Verma",
+      "phone": "+91 99887 76655",
+      "address": "Block B, Flat 201",
+      "type": "customer",
+      "creditLimit": 5000,
+      "createdDate": "2026-08-02T11:15:00.000Z",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "tx_201",
+      "bookId": "book_1",
+      "customerId": "cust_101",
+      "type": "gave",
+      "amount": 1450,
+      "date": "2026-08-05T09:30:00.000Z",
+      "note": "Grocery items, 5kg Rice, Oil tin",
+      "billNumber": "INV-891",
+      "mode": "Cash",
+      "attachment": ""
+    }
+  ],
+  "cashbook": [
+    {
+      "id": "cb_301",
+      "bookId": "book_1",
+      "type": "in",
+      "amount": 3200,
+      "date": "2026-08-09T09:51:59.560Z",
+      "category": "Daily Sales",
+      "note": "Counter cash sales total",
+      "mode": "Cash"
+    }
+  ],
+  "roster": [
+    {
+      "id": "rst_401",
+      "bookId": "book_1",
+      "itemName": "20L Water Can",
+      "category": "Drinking Water",
+      "currentTurnIndex": 0,
+      "memberIds": [
+        "cust_101",
+        "cust_102"
+      ],
+      "lastBroughtBy": "cust_101",
+      "lastBroughtDate": "2026-08-07T11:00:00.000Z",
+      "lastBroughtCost": 90,
+      "history": []
+    }
+  ],
+  "settings": {
+    "lang": "en",
+    "pin": "",
+    "theme": "light"
+  },
+  "userId": "usr_1786269031489",
+  "userData": {
+    "usr_demo": {
+      "business": {
+        "id": "b_usr_demo",
+        "name": "User's Khata",
+        "owner": "User",
+        "phone": "",
+        "address": "Shop / House Location",
+        "upiId": "@paytm",
+        "gstin": "",
+        "createdDate": "2026-08-10T07:57:57.033Z"
+      },
+      "books": [
+        {
+          "id": "book_usr_demo_1",
+          "name": "Main Shop Khata",
+          "isDefault": true
+        }
+      ],
+      "customers": [
+        {
+          "id": "cust_1786350488329",
+          "bookId": "book_usr_demo_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:28:08.329Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "Roommate B",
+          "phone": "9999999992",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786350439952",
+          "bookId": "book_usr_demo_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:27:19.952Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "Roommate A",
+          "phone": "9999999991",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "transactions": [
+        {
+          "id": "tx_1786350556941",
+          "bookId": "book_usr_demo_1",
+          "date": "2026-08-10T08:29:16.941Z",
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-10T08:29:16.941Z",
+          "customerId": "cust_1786350439952",
+          "type": "gave",
+          "amount": 100,
+          "note": "Kitchen Expense: Dinner Vegetables (Total ₹300)",
+          "mode": "UPI / Cash"
+        }
+      ],
+      "cashbook": [
+        {
+          "id": "cb_1786350556961",
+          "bookId": "book_usr_demo_1",
+          "date": "2026-08-10T08:29:16.961Z",
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-10T08:29:16.961Z",
+          "type": "out",
+          "amount": 300,
+          "category": "Kitchen Expense",
+          "note": "Bought Dinner Vegetables (Split among 2 members)"
+        },
+        {
+          "id": "cb_301",
+          "bookId": "book_kitchen",
+          "type": "out",
+          "amount": 380,
+          "date": "2026-08-07T11:00:00.000Z",
+          "category": "Duty Rotation",
+          "note": "Aata (Flour 10kg) brought by Ramesh Kumar",
+          "mode": "Cash",
+          "lastEditedBy": "Ramesh Kumar"
+        }
+      ],
+      "roster": [
+        {
+          "id": "rst_1786348896981",
+          "bookId": "book_1",
+          "currentTurnIndex": 0,
+          "history": [],
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-10T08:01:36.981Z",
+          "itemName": "A",
+          "category": "Drinking Water",
+          "memberIds": [
+            "cust_1786348756064",
+            "cust_1786348749560",
+            "cust_1786348693633"
+          ],
+          "lastBroughtBy": "cust_1786348756064",
+          "lastBroughtDate": "2026-08-10T08:01:36.981Z",
+          "lastBroughtCost": 90
+        },
+        {
+          "id": "rst_1786348859904",
+          "bookId": "book_1",
+          "currentTurnIndex": 0,
+          "history": [],
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-10T08:00:59.904Z",
+          "itemName": "AFDA",
+          "category": "Drinking Water",
+          "memberIds": [
+            "cust_1786348756064",
+            "cust_1786348749560",
+            "cust_1786348693633"
+          ],
+          "lastBroughtBy": "cust_1786348756064",
+          "lastBroughtDate": "2026-08-10T08:00:59.904Z",
+          "lastBroughtCost": 90
+        },
+        {
+          "id": "rst_401",
+          "bookId": "book_kitchen",
+          "itemName": "Aata (Flour 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 0,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-07T11:00:00.000Z",
+          "lastBroughtCost": 380,
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-07T11:00:00.000Z",
+          "history": [
+            {
+              "memberId": "cust_101",
+              "date": "2026-08-07T11:00:00.000Z",
+              "cost": 380,
+              "note": "Fortune 10kg Fresh Aata",
+              "markedBy": "Ramesh Kumar"
+            }
+          ]
+        },
+        {
+          "id": "rst_402",
+          "bookId": "book_kitchen",
+          "itemName": "Rice (Basmati 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 1,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-05T09:30:00.000Z",
+          "lastBroughtCost": 650,
+          "lastEditedBy": "Sunita Verma",
+          "lastEditedAt": "2026-08-05T09:30:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_403",
+          "bookId": "book_kitchen",
+          "itemName": "20L Water Can",
+          "category": "Drinking Water",
+          "currentTurnIndex": 2,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_102",
+          "lastBroughtDate": "2026-08-08T16:00:00.000Z",
+          "lastBroughtCost": 90,
+          "lastEditedBy": "Amit Patel",
+          "lastEditedAt": "2026-08-08T16:00:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_404",
+          "bookId": "book_kitchen",
+          "itemName": "Kitchen Gas Refill",
+          "category": "Gas & Energy",
+          "currentTurnIndex": 3,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_103",
+          "lastBroughtDate": "2026-08-01T10:00:00.000Z",
+          "lastBroughtCost": 1100,
+          "lastEditedBy": "Priya Sharma",
+          "lastEditedAt": "2026-08-01T10:00:00.000Z",
+          "history": []
+        }
+      ],
+      "settings": {
+        "lang": "en",
+        "pin": "",
+        "theme": "light"
+      }
+    },
+    "usr_1786349031782": {
+      "business": {
+        "id": "b_usr_1786349031782",
+        "name": "RR",
+        "owner": "TT",
+        "phone": "4445454545454",
+        "address": "Shop / House Location",
+        "upiId": "4445454545454@paytm",
+        "gstin": "",
+        "createdDate": "2026-08-10T08:03:51.782Z"
+      },
+      "books": [
+        {
+          "id": "book_usr_1786349031782_1",
+          "name": "Main Shop Khata",
+          "isDefault": true
+        }
+      ],
+      "customers": [],
+      "transactions": [],
+      "cashbook": [],
+      "roster": [],
+      "settings": {
+        "lang": "en",
+        "pin": "",
+        "theme": "light"
+      }
+    },
+    "usr_1786349663220": {
+      "business": {
+        "id": "b_usr_1786349663220",
+        "name": "New User Test Shop",
+        "owner": "Test New User",
+        "phone": "9998887776",
+        "address": "Shop / House Location",
+        "upiId": "9998887776@paytm",
+        "gstin": "",
+        "createdDate": "2026-08-10T08:14:23.220Z"
+      },
+      "books": [
+        {
+          "id": "book_usr_1786349663220_1",
+          "name": "Main Shop Khata",
+          "isDefault": true
+        }
+      ],
+      "customers": [
+        {
+          "id": "cust_1786350127180",
+          "bookId": "book_usr_1786349663220_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:22:07.180Z",
+          "avatar": "",
+          "lastEditedBy": "Test New User",
+          "name": "sk",
+          "phone": "",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786350121221",
+          "bookId": "book_usr_1786349663220_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:22:01.221Z",
+          "avatar": "",
+          "lastEditedBy": "Test New User",
+          "name": "om",
+          "phone": "",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786350114435",
+          "bookId": "book_usr_1786349663220_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:21:54.435Z",
+          "avatar": "",
+          "lastEditedBy": "Test New User",
+          "name": "amar",
+          "phone": "",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786350104231",
+          "bookId": "book_usr_1786349663220_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:21:44.231Z",
+          "avatar": "",
+          "lastEditedBy": "Test New User",
+          "name": "navin",
+          "phone": "",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        }
+      ],
+      "transactions": [],
+      "cashbook": [
+        {
+          "id": "cb_1786350227312",
+          "bookId": "book_usr_1786349663220_1",
+          "type": "out",
+          "amount": 200,
+          "date": "2026-08-10T08:23:47.311Z",
+          "category": "Duty Rotation",
+          "note": "aata brought by sk",
+          "mode": "Cash",
+          "lastEditedBy": "Test New User"
+        },
+        {
+          "id": "cb_1786350202493",
+          "bookId": "book_usr_1786349663220_1",
+          "type": "out",
+          "amount": 200,
+          "date": "2026-07-13T12:31:00.000Z",
+          "category": "Duty Rotation",
+          "note": "aata brought by navin",
+          "mode": "Cash",
+          "lastEditedBy": "Test New User"
+        }
+      ],
+      "roster": [
+        {
+          "id": "rst_1786350154998",
+          "bookId": "book_usr_1786349663220_1",
+          "currentTurnIndex": 2,
+          "history": [
+            {
+              "memberId": "cust_1786350127180",
+              "date": "2026-08-10T08:23:47.311Z",
+              "cost": 200,
+              "note": "Brought product",
+              "markedBy": "Test New User"
+            },
+            {
+              "memberId": "cust_1786350104231",
+              "date": "2026-07-13T12:31:00.000Z",
+              "cost": 200,
+              "note": "Brought product",
+              "markedBy": "Test New User"
+            }
+          ],
+          "lastEditedBy": "Test New User",
+          "lastEditedAt": "2026-08-10T08:23:47.311Z",
+          "itemName": "aata",
+          "category": "Groceries",
+          "memberIds": [
+            "cust_1786350104231",
+            "cust_1786350127180",
+            "cust_1786350121221",
+            "cust_1786350114435"
+          ],
+          "lastBroughtBy": "cust_1786350127180",
+          "lastBroughtDate": "2026-08-10T08:23:47.311Z",
+          "lastBroughtCost": 200
+        }
+      ],
+      "settings": {
+        "lang": "en",
+        "pin": "",
+        "theme": "light"
+      }
+    },
+    "usr_1786351167031": {
+      "business": {
+        "id": "b_usr_1786351167031",
+        "name": "testing's Khata",
+        "owner": "testing",
+        "phone": "123",
+        "address": "Shop / House Location",
+        "upiId": "123@paytm",
+        "gstin": "",
+        "createdDate": "2026-08-10T08:39:27.031Z"
+      },
+      "books": [
+        {
+          "id": "book_usr_1786351167031_1",
+          "name": "Main Shop Khata",
+          "isDefault": true
+        }
+      ],
+      "customers": [
+        {
+          "id": "cust_1786351548132",
+          "bookId": "book_usr_1786351167031_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:45:48.132Z",
+          "avatar": "",
+          "lastEditedBy": "testing",
+          "name": "dfgh",
+          "phone": "1234567890",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "transactions": [],
+      "cashbook": [],
+      "roster": [
+        {
+          "id": "rst_1786351213926",
+          "bookId": "book_usr_1786351167031_1",
+          "currentTurnIndex": 0,
+          "history": [],
+          "lastEditedBy": "testing",
+          "lastEditedAt": "2026-08-10T08:40:13.926Z",
+          "itemName": "atta",
+          "category": "Drinking Water",
+          "memberIds": [
+            "cust_1786351195181",
+            "cust_1786351184286",
+            "cust_1786351178055"
+          ],
+          "lastBroughtBy": "cust_1786351195181",
+          "lastBroughtDate": "2026-08-10T08:40:13.926Z",
+          "lastBroughtCost": 90
+        }
+      ],
+      "settings": {
+        "lang": "en",
+        "pin": "",
+        "theme": "light"
+      }
+    }
+  },
+  "users": [
+    {
+      "id": "usr_1786349031782",
+      "phone": "4445454545454",
+      "password": "1342",
+      "name": "TT",
+      "shopName": "RR",
+      "createdDate": "2026-08-10T08:03:51.782Z"
+    },
+    {
+      "id": "usr_1786349663220",
+      "phone": "9998887776",
+      "password": "1234",
+      "name": "Test New User",
+      "shopName": "New User Test Shop",
+      "createdDate": "2026-08-10T08:14:23.220Z"
+    },
+    {
+      "id": "usr_1786351167031",
+      "phone": "123",
+      "password": "233",
+      "name": "testing",
+      "shopName": "testing's Khata",
+      "createdDate": "2026-08-10T08:39:27.031Z"
+    }
+  ],
+  "kitchenGroups": {
+    "KITCHEN-491": {
+      "groupCode": "KITCHEN-491",
+      "name": "Shared Roommate Kitchen",
+      "createdDate": "2026-08-10T07:55:57.938Z",
+      "members": [
+        {
+          "id": "cust_1786348756064",
+          "bookId": "book_1",
+          "status": "active",
+          "createdDate": "2026-08-10T07:59:16.064Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "erewww",
+          "phone": "",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786348749560",
+          "bookId": "book_1",
+          "status": "active",
+          "createdDate": "2026-08-10T07:59:09.560Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "ewrw",
+          "phone": "wr",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786348693633",
+          "bookId": "book_1",
+          "status": "active",
+          "createdDate": "2026-08-10T07:58:13.633Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "Amit Kumar",
+          "phone": "9876543211",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "customers": [
+        {
+          "id": "cust_1786348756064",
+          "bookId": "book_1",
+          "status": "active",
+          "createdDate": "2026-08-10T07:59:16.064Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "erewww",
+          "phone": "",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786348749560",
+          "bookId": "book_1",
+          "status": "active",
+          "createdDate": "2026-08-10T07:59:09.560Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "ewrw",
+          "phone": "wr",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786348693633",
+          "bookId": "book_1",
+          "status": "active",
+          "createdDate": "2026-08-10T07:58:13.633Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "Amit Kumar",
+          "phone": "9876543211",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "roster": [
+        {
+          "id": "rst_1786348896981",
+          "bookId": "book_1",
+          "currentTurnIndex": 0,
+          "history": [],
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-10T08:01:36.981Z",
+          "itemName": "A",
+          "category": "Drinking Water",
+          "memberIds": [
+            "cust_1786348756064",
+            "cust_1786348749560",
+            "cust_1786348693633"
+          ],
+          "lastBroughtBy": "cust_1786348756064",
+          "lastBroughtDate": "2026-08-10T08:01:36.981Z",
+          "lastBroughtCost": 90
+        },
+        {
+          "id": "rst_1786348859904",
+          "bookId": "book_1",
+          "currentTurnIndex": 0,
+          "history": [],
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-10T08:00:59.904Z",
+          "itemName": "AFDA",
+          "category": "Drinking Water",
+          "memberIds": [
+            "cust_1786348756064",
+            "cust_1786348749560",
+            "cust_1786348693633"
+          ],
+          "lastBroughtBy": "cust_1786348756064",
+          "lastBroughtDate": "2026-08-10T08:00:59.904Z",
+          "lastBroughtCost": 90
+        },
+        {
+          "id": "rst_401",
+          "bookId": "book_kitchen",
+          "itemName": "Aata (Flour 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 0,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-07T11:00:00.000Z",
+          "lastBroughtCost": 380,
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-07T11:00:00.000Z",
+          "history": [
+            {
+              "memberId": "cust_101",
+              "date": "2026-08-07T11:00:00.000Z",
+              "cost": 380,
+              "note": "Fortune 10kg Fresh Aata",
+              "markedBy": "Ramesh Kumar"
+            }
+          ]
+        },
+        {
+          "id": "rst_402",
+          "bookId": "book_kitchen",
+          "itemName": "Rice (Basmati 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 1,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-05T09:30:00.000Z",
+          "lastBroughtCost": 650,
+          "lastEditedBy": "Sunita Verma",
+          "lastEditedAt": "2026-08-05T09:30:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_403",
+          "bookId": "book_kitchen",
+          "itemName": "20L Water Can",
+          "category": "Drinking Water",
+          "currentTurnIndex": 2,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_102",
+          "lastBroughtDate": "2026-08-08T16:00:00.000Z",
+          "lastBroughtCost": 90,
+          "lastEditedBy": "Amit Patel",
+          "lastEditedAt": "2026-08-08T16:00:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_404",
+          "bookId": "book_kitchen",
+          "itemName": "Kitchen Gas Refill",
+          "category": "Gas & Energy",
+          "currentTurnIndex": 3,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_103",
+          "lastBroughtDate": "2026-08-01T10:00:00.000Z",
+          "lastBroughtCost": 1100,
+          "lastEditedBy": "Priya Sharma",
+          "lastEditedAt": "2026-08-01T10:00:00.000Z",
+          "history": []
+        }
+      ],
+      "transactions": [],
+      "cashbook": [
+        {
+          "id": "cb_1786348676880",
+          "bookId": "book_1",
+          "date": "2026-08-10T07:57:56.880Z",
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-10T07:57:56.880Z",
+          "type": "out",
+          "amount": 22222,
+          "category": "Kitchen Expense",
+          "note": "Bought asdfghj (Split among 2 members)"
+        },
+        {
+          "id": "cb_301",
+          "bookId": "book_kitchen",
+          "type": "out",
+          "amount": 380,
+          "date": "2026-08-07T11:00:00.000Z",
+          "category": "Duty Rotation",
+          "note": "Aata (Flour 10kg) brought by Ramesh Kumar",
+          "mode": "Cash",
+          "lastEditedBy": "Ramesh Kumar"
+        }
+      ],
+      "lastUpdated": "2026-08-10T08:01:36.990Z"
+    },
+    "RRR": {
+      "groupCode": "RRR",
+      "name": "Shared Roommate Kitchen",
+      "createdDate": "2026-08-10T08:20:20.297Z",
+      "members": [
+        {
+          "id": "cust_101",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "customers": [
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "roster": [
+        {
+          "id": "rst_401",
+          "bookId": "book_kitchen",
+          "itemName": "Aata (Flour 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 0,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-07T11:00:00.000Z",
+          "lastBroughtCost": 380,
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-07T11:00:00.000Z",
+          "history": [
+            {
+              "memberId": "cust_101",
+              "date": "2026-08-07T11:00:00.000Z",
+              "cost": 380,
+              "note": "Fortune 10kg Fresh Aata",
+              "markedBy": "Ramesh Kumar"
+            }
+          ]
+        },
+        {
+          "id": "rst_402",
+          "bookId": "book_kitchen",
+          "itemName": "Rice (Basmati 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 1,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-05T09:30:00.000Z",
+          "lastBroughtCost": 650,
+          "lastEditedBy": "Sunita Verma",
+          "lastEditedAt": "2026-08-05T09:30:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_403",
+          "bookId": "book_kitchen",
+          "itemName": "20L Water Can",
+          "category": "Drinking Water",
+          "currentTurnIndex": 2,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_102",
+          "lastBroughtDate": "2026-08-08T16:00:00.000Z",
+          "lastBroughtCost": 90,
+          "lastEditedBy": "Amit Patel",
+          "lastEditedAt": "2026-08-08T16:00:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_404",
+          "bookId": "book_kitchen",
+          "itemName": "Kitchen Gas Refill",
+          "category": "Gas & Energy",
+          "currentTurnIndex": 3,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_103",
+          "lastBroughtDate": "2026-08-01T10:00:00.000Z",
+          "lastBroughtCost": 1100,
+          "lastEditedBy": "Priya Sharma",
+          "lastEditedAt": "2026-08-01T10:00:00.000Z",
+          "history": []
+        }
+      ],
+      "transactions": [],
+      "cashbook": [
+        {
+          "id": "cb_301",
+          "bookId": "book_kitchen",
+          "type": "out",
+          "amount": 380,
+          "date": "2026-08-07T11:00:00.000Z",
+          "category": "Duty Rotation",
+          "note": "Aata (Flour 10kg) brought by Ramesh Kumar",
+          "mode": "Cash",
+          "lastEditedBy": "Ramesh Kumar"
+        }
+      ]
+    },
+    "ROOM12": {
+      "groupCode": "ROOM12",
+      "name": "Shared Roommate Kitchen",
+      "createdDate": "2026-08-10T08:23:30.355Z",
+      "members": [
+        {
+          "id": "cust_101",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "customers": [
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "roster": [
+        {
+          "id": "rst_401",
+          "bookId": "book_kitchen",
+          "itemName": "Aata (Flour 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 0,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-07T11:00:00.000Z",
+          "lastBroughtCost": 380,
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-07T11:00:00.000Z",
+          "history": [
+            {
+              "memberId": "cust_101",
+              "date": "2026-08-07T11:00:00.000Z",
+              "cost": 380,
+              "note": "Fortune 10kg Fresh Aata",
+              "markedBy": "Ramesh Kumar"
+            }
+          ]
+        },
+        {
+          "id": "rst_402",
+          "bookId": "book_kitchen",
+          "itemName": "Rice (Basmati 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 1,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-05T09:30:00.000Z",
+          "lastBroughtCost": 650,
+          "lastEditedBy": "Sunita Verma",
+          "lastEditedAt": "2026-08-05T09:30:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_403",
+          "bookId": "book_kitchen",
+          "itemName": "20L Water Can",
+          "category": "Drinking Water",
+          "currentTurnIndex": 2,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_102",
+          "lastBroughtDate": "2026-08-08T16:00:00.000Z",
+          "lastBroughtCost": 90,
+          "lastEditedBy": "Amit Patel",
+          "lastEditedAt": "2026-08-08T16:00:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_404",
+          "bookId": "book_kitchen",
+          "itemName": "Kitchen Gas Refill",
+          "category": "Gas & Energy",
+          "currentTurnIndex": 3,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_103",
+          "lastBroughtDate": "2026-08-01T10:00:00.000Z",
+          "lastBroughtCost": 1100,
+          "lastEditedBy": "Priya Sharma",
+          "lastEditedAt": "2026-08-01T10:00:00.000Z",
+          "history": []
+        }
+      ],
+      "transactions": [],
+      "cashbook": [
+        {
+          "id": "cb_301",
+          "bookId": "book_kitchen",
+          "type": "out",
+          "amount": 380,
+          "date": "2026-08-07T11:00:00.000Z",
+          "category": "Duty Rotation",
+          "note": "Aata (Flour 10kg) brought by Ramesh Kumar",
+          "mode": "Cash",
+          "lastEditedBy": "Ramesh Kumar"
+        }
+      ]
+    },
+    "AAA": {
+      "groupCode": "AAA",
+      "name": "Shared Roommate Kitchen",
+      "createdDate": "2026-08-10T08:25:27.168Z",
+      "members": [
+        {
+          "id": "cust_101",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "customers": [
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "roster": [
+        {
+          "id": "rst_401",
+          "bookId": "book_kitchen",
+          "itemName": "Aata (Flour 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 0,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-07T11:00:00.000Z",
+          "lastBroughtCost": 380,
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-07T11:00:00.000Z",
+          "history": [
+            {
+              "memberId": "cust_101",
+              "date": "2026-08-07T11:00:00.000Z",
+              "cost": 380,
+              "note": "Fortune 10kg Fresh Aata",
+              "markedBy": "Ramesh Kumar"
+            }
+          ]
+        },
+        {
+          "id": "rst_402",
+          "bookId": "book_kitchen",
+          "itemName": "Rice (Basmati 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 1,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-05T09:30:00.000Z",
+          "lastBroughtCost": 650,
+          "lastEditedBy": "Sunita Verma",
+          "lastEditedAt": "2026-08-05T09:30:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_403",
+          "bookId": "book_kitchen",
+          "itemName": "20L Water Can",
+          "category": "Drinking Water",
+          "currentTurnIndex": 2,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_102",
+          "lastBroughtDate": "2026-08-08T16:00:00.000Z",
+          "lastBroughtCost": 90,
+          "lastEditedBy": "Amit Patel",
+          "lastEditedAt": "2026-08-08T16:00:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_404",
+          "bookId": "book_kitchen",
+          "itemName": "Kitchen Gas Refill",
+          "category": "Gas & Energy",
+          "currentTurnIndex": 3,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_103",
+          "lastBroughtDate": "2026-08-01T10:00:00.000Z",
+          "lastBroughtCost": 1100,
+          "lastEditedBy": "Priya Sharma",
+          "lastEditedAt": "2026-08-01T10:00:00.000Z",
+          "history": []
+        }
+      ],
+      "transactions": [],
+      "cashbook": [
+        {
+          "id": "cb_301",
+          "bookId": "book_kitchen",
+          "type": "out",
+          "amount": 380,
+          "date": "2026-08-07T11:00:00.000Z",
+          "category": "Duty Rotation",
+          "note": "Aata (Flour 10kg) brought by Ramesh Kumar",
+          "mode": "Cash",
+          "lastEditedBy": "Ramesh Kumar"
+        }
+      ]
+    },
+    "FFF": {
+      "groupCode": "FFF",
+      "name": "Shared Roommate Kitchen",
+      "createdDate": "2026-08-10T08:25:36.174Z",
+      "members": [
+        {
+          "id": "cust_1786350488329",
+          "bookId": "book_usr_demo_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:28:08.329Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "Roommate B",
+          "phone": "9999999992",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786350439952",
+          "bookId": "book_usr_demo_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:27:19.952Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "Roommate A",
+          "phone": "9999999991",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "customers": [
+        {
+          "id": "cust_1786350488329",
+          "bookId": "book_usr_demo_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:28:08.329Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "Roommate B",
+          "phone": "9999999992",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_1786350439952",
+          "bookId": "book_usr_demo_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:27:19.952Z",
+          "avatar": "",
+          "lastEditedBy": "Rajesh Sharma",
+          "name": "Roommate A",
+          "phone": "9999999991",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "roster": [
+        {
+          "id": "rst_401",
+          "bookId": "book_kitchen",
+          "itemName": "Aata (Flour 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 0,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-07T11:00:00.000Z",
+          "lastBroughtCost": 380,
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-07T11:00:00.000Z",
+          "history": [
+            {
+              "memberId": "cust_101",
+              "date": "2026-08-07T11:00:00.000Z",
+              "cost": 380,
+              "note": "Fortune 10kg Fresh Aata",
+              "markedBy": "Ramesh Kumar"
+            }
+          ]
+        },
+        {
+          "id": "rst_402",
+          "bookId": "book_kitchen",
+          "itemName": "Rice (Basmati 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 1,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-05T09:30:00.000Z",
+          "lastBroughtCost": 650,
+          "lastEditedBy": "Sunita Verma",
+          "lastEditedAt": "2026-08-05T09:30:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_403",
+          "bookId": "book_kitchen",
+          "itemName": "20L Water Can",
+          "category": "Drinking Water",
+          "currentTurnIndex": 2,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_102",
+          "lastBroughtDate": "2026-08-08T16:00:00.000Z",
+          "lastBroughtCost": 90,
+          "lastEditedBy": "Amit Patel",
+          "lastEditedAt": "2026-08-08T16:00:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_404",
+          "bookId": "book_kitchen",
+          "itemName": "Kitchen Gas Refill",
+          "category": "Gas & Energy",
+          "currentTurnIndex": 3,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_103",
+          "lastBroughtDate": "2026-08-01T10:00:00.000Z",
+          "lastBroughtCost": 1100,
+          "lastEditedBy": "Priya Sharma",
+          "lastEditedAt": "2026-08-01T10:00:00.000Z",
+          "history": []
+        }
+      ],
+      "transactions": [],
+      "cashbook": [
+        {
+          "id": "cb_1786350556961",
+          "bookId": "book_usr_demo_1",
+          "date": "2026-08-10T08:29:16.961Z",
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-10T08:29:16.961Z",
+          "type": "out",
+          "amount": 300,
+          "category": "Kitchen Expense",
+          "note": "Bought Dinner Vegetables (Split among 2 members)"
+        },
+        {
+          "id": "cb_301",
+          "bookId": "book_kitchen",
+          "type": "out",
+          "amount": 380,
+          "date": "2026-08-07T11:00:00.000Z",
+          "category": "Duty Rotation",
+          "note": "Aata (Flour 10kg) brought by Ramesh Kumar",
+          "mode": "Cash",
+          "lastEditedBy": "Ramesh Kumar"
+        }
+      ],
+      "lastUpdated": "2026-08-10T08:29:17.027Z"
+    },
+    "WWW123": {
+      "groupCode": "WWW123",
+      "name": "Shared Roommate Kitchen",
+      "createdDate": "2026-08-10T08:41:00.383Z",
+      "members": [
+        {
+          "id": "cust_1786351548132",
+          "bookId": "book_usr_1786351167031_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:45:48.132Z",
+          "avatar": "",
+          "lastEditedBy": "testing",
+          "name": "dfgh",
+          "phone": "1234567890",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "customers": [
+        {
+          "id": "cust_1786351548132",
+          "bookId": "book_usr_1786351167031_1",
+          "status": "active",
+          "createdDate": "2026-08-10T08:45:48.132Z",
+          "avatar": "",
+          "lastEditedBy": "testing",
+          "name": "dfgh",
+          "phone": "1234567890",
+          "address": "",
+          "type": "customer",
+          "creditLimit": 10000
+        },
+        {
+          "id": "cust_101",
+          "bookId": "book_kitchen",
+          "name": "Ramesh Kumar",
+          "phone": "+91 98123 45678",
+          "address": "Room #1, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 10000,
+          "createdDate": "2026-08-01T10:30:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150"
+        },
+        {
+          "id": "cust_102",
+          "bookId": "book_kitchen",
+          "name": "Sunita Verma",
+          "phone": "+91 99887 76655",
+          "address": "Room #2, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-02T11:15:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+        },
+        {
+          "id": "cust_103",
+          "bookId": "book_kitchen",
+          "name": "Amit Patel",
+          "phone": "+91 97112 23344",
+          "address": "Room #3, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-03T09:20:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150"
+        },
+        {
+          "id": "cust_104",
+          "bookId": "book_kitchen",
+          "name": "Priya Sharma",
+          "phone": "+91 95443 32211",
+          "address": "Room #4, Main Flat",
+          "status": "active",
+          "type": "customer",
+          "creditLimit": 5000,
+          "createdDate": "2026-08-04T14:40:00.000Z",
+          "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150"
+        }
+      ],
+      "roster": [
+        {
+          "id": "rst_401",
+          "bookId": "book_kitchen",
+          "itemName": "Aata (Flour 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 0,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-07T11:00:00.000Z",
+          "lastBroughtCost": 380,
+          "lastEditedBy": "Rajesh Sharma",
+          "lastEditedAt": "2026-08-07T11:00:00.000Z",
+          "history": [
+            {
+              "memberId": "cust_101",
+              "date": "2026-08-07T11:00:00.000Z",
+              "cost": 380,
+              "note": "Fortune 10kg Fresh Aata",
+              "markedBy": "Ramesh Kumar"
+            }
+          ]
+        },
+        {
+          "id": "rst_402",
+          "bookId": "book_kitchen",
+          "itemName": "Rice (Basmati 10kg)",
+          "category": "Groceries",
+          "currentTurnIndex": 1,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_101",
+          "lastBroughtDate": "2026-08-05T09:30:00.000Z",
+          "lastBroughtCost": 650,
+          "lastEditedBy": "Sunita Verma",
+          "lastEditedAt": "2026-08-05T09:30:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_403",
+          "bookId": "book_kitchen",
+          "itemName": "20L Water Can",
+          "category": "Drinking Water",
+          "currentTurnIndex": 2,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_102",
+          "lastBroughtDate": "2026-08-08T16:00:00.000Z",
+          "lastBroughtCost": 90,
+          "lastEditedBy": "Amit Patel",
+          "lastEditedAt": "2026-08-08T16:00:00.000Z",
+          "history": []
+        },
+        {
+          "id": "rst_404",
+          "bookId": "book_kitchen",
+          "itemName": "Kitchen Gas Refill",
+          "category": "Gas & Energy",
+          "currentTurnIndex": 3,
+          "memberIds": [
+            "cust_101",
+            "cust_102",
+            "cust_103",
+            "cust_104"
+          ],
+          "lastBroughtBy": "cust_103",
+          "lastBroughtDate": "2026-08-01T10:00:00.000Z",
+          "lastBroughtCost": 1100,
+          "lastEditedBy": "Priya Sharma",
+          "lastEditedAt": "2026-08-01T10:00:00.000Z",
+          "history": []
+        }
+      ],
+      "transactions": [],
+      "cashbook": [
+        {
+          "id": "cb_301",
+          "bookId": "book_kitchen",
+          "type": "out",
+          "amount": 380,
+          "date": "2026-08-07T11:00:00.000Z",
+          "category": "Duty Rotation",
+          "note": "Aata (Flour 10kg) brought by Ramesh Kumar",
+          "mode": "Cash",
+          "lastEditedBy": "Ramesh Kumar"
+        }
+      ],
+      "lastUpdated": "2026-08-10T08:45:48.146Z"
+    }
+  }
+}

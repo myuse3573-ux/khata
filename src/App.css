@@ -1,0 +1,71 @@
+/* App.css — Application custom styles */
+/* Note: Tailwind handles the vast majority of styling.
+   This file contains only custom animations and app-specific CSS
+   that Tailwind utilities cannot cover. */
+
+/* ── Animations ─────────────────────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pop-in {
+  0%   { opacity: 0; transform: scale(0.9); }
+  60%  { transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.85); }
+}
+
+.animate-fade-in       { animation: fade-in 0.2s ease-out forwards; }
+.animate-slide-up      { animation: slide-up 0.25s ease-out forwards; }
+.animate-slide-right   { animation: slide-in-right 0.2s ease-out forwards; }
+.animate-pop-in        { animation: pop-in 0.25s cubic-bezier(.34,1.56,.64,1) forwards; }
+.animate-shake         { animation: shake 0.4s ease-in-out; }
+.animate-pulse-dot     { animation: pulse-dot 1.5s ease-in-out infinite; }
+
+/* ── Modal backdrop ─────────────────────────────────────────────────────── */
+.modal-backdrop {
+  animation: fade-in 0.15s ease-out;
+}
+
+/* ── Safe area for mobile bottom nav ───────────────────────────────────── */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Scrollbar styling ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ── Prevent text selection on tap (mobile) ─────────────────────────────── */
+.no-select { -webkit-user-select: none; user-select: none; }
+
+/* ── Focus ring override for touch devices ──────────────────────────────── */
+@media (hover: none) {
+  :focus { outline: none; }
+  :focus-visible { outline: 2px solid #10b981; outline-offset: 2px; }
+}
