@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { WifiOff, RefreshCw } from "lucide-react";
+import { getApiBaseUrl } from "../../config/api";
 
 /**
  * OnlineStatusBanner
@@ -17,7 +18,7 @@ export const OnlineStatusBanner = () => {
   const checkServer = useCallback(async () => {
     setIsRetrying(true);
     try {
-      const res = await fetch("/api/health", {
+      const res = await fetch(`${getApiBaseUrl()}/health`, {
         signal: AbortSignal.timeout(4000) // 4s timeout
       });
       if (res.ok) {
@@ -95,7 +96,7 @@ export const ServerStatusDot = () => {
   useEffect(() => {
     const check = async () => {
       try {
-        const res = await fetch("/api/health", { signal: AbortSignal.timeout(3000) });
+        const res = await fetch(`${getApiBaseUrl()}/health`, { signal: AbortSignal.timeout(3000) });
         setStatus(res.ok ? "online" : "offline");
       } catch {
         setStatus("offline");
