@@ -3,14 +3,14 @@
  * Provides offline capabilities, caching static assets, and PWA compatibility
  */
 
-const CACHE_NAME = 'khata-cache-v1';
+const CACHE_NAME = 'khata-cache-v2';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/pwa-192x192.png',
-  '/pwa-512x512.png',
-  '/maskable-icon-512x512.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './pwa-192x192.png',
+  './pwa-512x512.png',
+  './maskable-icon-512x512.png'
 ];
 
 // Install event — pre-cache core static assets
@@ -44,7 +44,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
   // Skip non-GET requests and API calls from caching
-  if (event.request.method !== 'GET' || url.pathname.startsWith('/api')) {
+  if (event.request.method !== 'GET' || url.pathname.includes('/api/')) {
     return;
   }
 

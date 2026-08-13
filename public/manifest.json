@@ -1,12 +1,12 @@
 {
-  "id": "/",
+  "id": "khata-pwa-app",
   "short_name": "Khata",
   "name": "Khata - Udhar & Cashbook App",
   "description": "Digital Khata Book & Cashbook Manager - Track customer udhar, jama, payment reminders, cashbook expenses, and UPI payment QR codes on mobile and web.",
   "lang": "en",
   "dir": "ltr",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0f172a",
@@ -14,19 +14,19 @@
   "categories": ["business", "finance", "productivity"],
   "icons": [
     {
-      "src": "/pwa-192x192.png",
+      "src": "pwa-192x192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "/pwa-512x512.png",
+      "src": "pwa-512x512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "/maskable-icon-512x512.png",
+      "src": "maskable-icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
