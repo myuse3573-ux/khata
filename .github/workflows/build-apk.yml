@@ -30,17 +30,13 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Build Web App
         run: npm run build
 
-      - name: Initialize Capacitor Android Platform
-        run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "Khata" "com.khata.app" --web-dir dist
-          npx cap add android
-          npx cap sync android
+      - name: Sync Capacitor Android Platform
+        run: npx cap sync android
 
       - name: Build Android APK with Gradle
         run: |
