@@ -1,9 +1,9 @@
 import { LocalDb } from './localDb';
 import { NativeStorage } from './nativeStorage';
 import { SyncOperation, EntityType, OperationType } from '../types';
+import { getApiBaseUrl } from '../config/api';
 
 let isSyncing = false;
-const SERVER_URL = 'http://localhost:5000/api'; // Configurable REST API endpoint
 
 export const SyncEngine = {
   /**
@@ -56,7 +56,7 @@ export const SyncEngine = {
       }
 
       // Batch push pending operations to server with idempotency keys
-      const res = await fetch(`${SERVER_URL}/sync/push`, {
+      const res = await fetch(`${getApiBaseUrl()}/sync/push`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

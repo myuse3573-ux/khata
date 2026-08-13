@@ -9,8 +9,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "./useAuth";
 import { KitchenContext } from "./kitchenContextValue";
+import { getApiBaseUrl } from "../config/api";
 
-const API_BASE = "/api";
+const API_BASE = getApiBaseUrl();
 
 export const KitchenProvider = ({ children }) => {
   const { user, token, isAuthenticated, logout } = useAuth();

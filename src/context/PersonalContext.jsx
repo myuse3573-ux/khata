@@ -8,8 +8,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "./useAuth";
 import { PersonalContext } from "./personalContextValue";
+import { getApiBaseUrl } from "../config/api";
 
-const API_BASE = "/api";
+const API_BASE = getApiBaseUrl();
 
 // ── Storage helpers (user-scoped) ──────────────────────────────────────────
 const loadLocal = (userId, key, fallback) => {

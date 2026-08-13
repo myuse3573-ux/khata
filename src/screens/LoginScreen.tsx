@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getApiBaseUrl } from '../config/api';
 import {
   View,
   Text,
@@ -52,11 +53,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
         ? { phone: cleanPhone, password, name, shopName }
         : { phone: cleanPhone, password };
 
-      const getApiUrl = () => {
-        return 'http://localhost:5000/api';
-      };
-
-      const res = await fetch(`${getApiUrl()}${endpoint}`, {
+      const res = await fetch(`${getApiBaseUrl()}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)

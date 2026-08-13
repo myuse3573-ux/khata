@@ -1,15 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { AuthContext } from "./authContextValue";
-
-const getApiBaseUrl = () => {
-  if (typeof window !== "undefined" && window.location) {
-    const { protocol, hostname, port } = window.location;
-    if (port === "5173" || port === "3000") {
-      return `${protocol}//${hostname}:5000/api`;
-    }
-  }
-  return "/api";
-};
+import { getApiBaseUrl } from "../config/api";
 
 const API_BASE = getApiBaseUrl();
 
