@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Khata",
+    "slug": "khata",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./public/pwa-512x512.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./public/pwa-512x512.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f172a"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.khata.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./public/pwa-512x512.png",
+        "backgroundColor": "#0f172a"
+      },
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ]
+    },
+    "scheme": "khata",
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Khata requires camera access to scan UPI payment and Kitchen invitation QR codes."
+        }
+      ]
+    ]
+  }
+}
