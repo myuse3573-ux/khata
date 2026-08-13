@@ -3,8 +3,8 @@
  * Supports Local Development, Cloud Production Endpoint, and Offline Fallback
  */
 
-// Production Cloud Backend URL (configured for Koyeb/Render/Vercel free tier)
-export const CLOUD_API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://khata-backend.koyeb.app/api';
+// Production Cloud Backend URL (Render Production Web Service)
+export const CLOUD_API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://khata-backend.onrender.com/api';
 export const LOCAL_API_URL = 'http://localhost:5000/api';
 
 export const getApiBaseUrl = (): string => {

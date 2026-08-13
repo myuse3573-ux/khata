@@ -89,26 +89,28 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
         return { success: true };
       } else {
-        setAuthError(data.error || "Login failed. Please try again.");
+        const errorMsg = data.error || "Invalid phone number/email or password. Please check your credentials or create a New Account.";
+        setAuthError(errorMsg);
         setIsLoading(false);
-        return { success: false, error: data.error };
+        return { success: false, error: errorMsg };
       }
     } catch {
-      // Server unreachable / Offline Mode Fallback
-      console.log("Server unreachable: Activating local offline session...");
-      const offlineUser = {
-        id: "usr_offline_" + cleanIdentifier.replace(/[^0-9]/g, ""),
-        name: cleanIdentifier.includes("@") ? cleanIdentifier.split("@")[0] : "Khata User",
-        phone: cleanIdentifier.replace(/[^0-9]/g, "") || "9876543210",
-        shopName: "My Khata (Offline Mode)",
-        isOfflineMode: true,
-        createdAt: new Date().toISOString()
-      };
-      const offlineToken = "offline_session_token_" + Date.now();
-      saveSession(offlineToken, offlineUser);
-      setIsLocked(false);
+      // Server unreachable: Check if this user has a previously saved local offline session
+      const savedUserStr = localStorage.getItem("khata_user");
+      if (savedUserStr) {
+        try {
+          const savedUser = JSON.parse(savedUserStr);
+          if (savedUser && (savedUser.phone === cleanIdentifier || savedUser.email === cleanIdentifier)) {
+            setIsLocked(false);
+            setIsLoading(false);
+            return { success: true, isOffline: true };
+          }
+        } catch { /* parse error */ }
+      }
+      const errorMsg = "Server unreachable. No local account found for this phone/email. Please register a New Account.";
+      setAuthError(errorMsg);
       setIsLoading(false);
-      return { success: true, isOffline: true };
+      return { success: false, error: errorMsg };
     }
   };
 
