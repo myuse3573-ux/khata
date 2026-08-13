@@ -40,6 +40,22 @@ const generalLimiter = rateLimit({
 app.use("/api/auth", authLimiter);
 app.use("/api", generalLimiter);
 
+// ─── Health & Status Endpoints ──────────────────────────────────────────────
+app.get(["/", "/api", "/api/health"], (req, res) => {
+  res.json({
+    name: "Khata Production API Backend Server",
+    status: "online",
+    version: "3.0.0",
+    database: process.env.DATABASE_URL ? "postgresql (Neon)" : "sqlite",
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: "/api/health",
+      login: "/api/auth/login",
+      register: "/api/auth/register"
+    }
+  });
+});
+
 // ─── Initialize Database ───────────────────────────────────────────────────────
 initDatabase();
 const db = getDb();
