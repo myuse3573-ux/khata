@@ -1,6 +1,6 @@
 import React from "react";
 import { Users, BookOpenCheck, BarChart3, QrCode, RotateCw, Settings } from "lucide-react";
-import { usePersonal } from "../../context/PersonalContext";
+import { usePersonal } from "../../context/usePersonal";
 import { translations } from "../../utils/translations";
 
 export const BottomNav = ({ activeTab, setActiveTab }) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useKhata } from "../../context/KhataContext";
+import { useKhata } from "../../context/useKhata";
 import { translations } from "../../utils/translations";
 import { X, User, Phone, MapPin, ShieldAlert, Edit2 } from "lucide-react";
 

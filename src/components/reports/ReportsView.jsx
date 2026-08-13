@@ -1,5 +1,5 @@
 import React from "react";
-import { useKhata } from "../../context/KhataContext";
+import { useKhata } from "../../context/useKhata";
 import { translations } from "../../utils/translations";
 import { formatCurrency, calculateCustomerBalance } from "../../utils/formatters";
 import { generateBusinessReportPDF, generateCustomerPDF } from "../../utils/pdfGenerator";

@@ -1,4 +1,3 @@
-/* eslint-disable react/only-export-components */
 /**
  * KhataContext.jsx — Compatibility bridge
  *
@@ -8,4 +7,4 @@
  *
  * New components should import directly from PersonalContext or KitchenContext.
  */
-export { PersonalProvider as KhataProvider, usePersonal as useKhata } from "./PersonalContext";
+export { PersonalProvider as KhataProvider } from "./PersonalContext";

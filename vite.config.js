@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
+    host: true, // Expose server to local Wi-Fi network (Android phones on same Wi-Fi)
     // Ignore server database files to prevent Vite dev server HMR from triggering automatic page reloads
     watch: {
       ignored: ['**/server/**', '**/data.db.json', '**/*.db.json']

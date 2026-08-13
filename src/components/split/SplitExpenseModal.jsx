@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { usePersonal } from "../../context/PersonalContext";
+import { usePersonal } from "../../context/usePersonal";
 import { translations } from "../../utils/translations";
 import { formatCurrency } from "../../utils/formatters";
 import {

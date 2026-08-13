@@ -5,13 +5,11 @@
  */
 
 import Database from "better-sqlite3";
-import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = path.join(__dirname, "khata.db");
-const JSON_LEGACY_PATH = path.join(__dirname, "data.db.json");
 
 let db;
 
@@ -23,14 +21,6 @@ export function initDatabase() {
   db.pragma("synchronous = NORMAL");   // Balance durability vs speed
 
   createSchema();
-
-  // Run migration from legacy JSON if needed
-  if (fs.existsSync(JSON_LEGACY_PATH)) {
-    const stats = db.prepare("SELECT COUNT(*) as count FROM users").get();
-    if (stats.count === 0) {
-      migrateFromJson();
-    }
-  }
 
   // Ensure demo user exists
   ensureDemoUser();
@@ -293,147 +283,6 @@ function ensureDemoUser() {
   })();
 }
 
-/**
- * Migrate data from legacy data.db.json to SQLite
- * Creates a backup before migrating
- */
-function migrateFromJson() {
-  console.log("📦 Migrating from data.db.json to SQLite...");
-  const logLines = [];
-  const log = (msg) => {
-    console.log(msg);
-    logLines.push(`[${new Date().toISOString()}] ${msg}`);
-  };
 
-  try {
-    // 1. Create backup
-    const backupPath = `${JSON_LEGACY_PATH}.backup-${Date.now()}`;
-    fs.copyFileSync(JSON_LEGACY_PATH, backupPath);
-    log(`✅ Backup created: ${backupPath}`);
-
-    const raw = fs.readFileSync(JSON_LEGACY_PATH, "utf-8");
-    const legacy = JSON.parse(raw);
-
-    const insertUser = db.prepare(`
-      INSERT OR IGNORE INTO users (id, phone, password_hash, name, shop_name, created_at)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `);
-    const insertData = db.prepare(`
-      INSERT OR IGNORE INTO user_data (user_id, business, books, customers, transactions, cashbook, settings)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `);
-    const insertGroup = db.prepare(`
-      INSERT OR IGNORE INTO kitchen_groups (id, name, join_code, created_by, max_members, created_at)
-      VALUES (?, ?, ?, ?, 20, ?)
-    `);
-    const insertMember = db.prepare(`
-      INSERT OR IGNORE INTO kitchen_members (id, group_id, user_id, display_name, role, status)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `);
-    const insertKitchenData = db.prepare(`
-      INSERT OR IGNORE INTO kitchen_data (group_id, roster, cashbook)
-      VALUES (?, ?, ?)
-    `);
-
-    // 2. Migrate users
-    const users = legacy.users || [];
-    let migratedUsers = 0;
-
-    db.transaction(() => {
-      for (const user of users) {
-        if (!user.id || !user.phone || !user.password) continue;
-
-        // Convert plain-text password to a simple hash marker
-        // We can't reverse plain-text to bcrypt without knowing the password
-        // Strategy: mark as LEGACY_PLAIN: prefix, force reset on first login
-        const passwordHash = `LEGACY_PLAIN:${user.password}`;
-
-        insertUser.run(
-          user.id,
-          user.phone.replace(/[^0-9]/g, ""),
-          passwordHash,
-          user.name || "User",
-          user.shopName || `${user.name || "User"}'s Khata`,
-          user.createdDate || new Date().toISOString()
-        );
-
-        const uData = (legacy.userData || {})[user.id] || {};
-        insertData.run(
-          user.id,
-          JSON.stringify(uData.business || {}),
-          JSON.stringify(uData.books || []),
-          JSON.stringify(uData.customers || []),
-          JSON.stringify(uData.transactions || []),
-          JSON.stringify(uData.cashbook || []),
-          JSON.stringify(uData.settings || { lang: "en", pin: "", theme: "light" })
-        );
-        migratedUsers++;
-      }
-    })();
-    log(`✅ Migrated ${migratedUsers} users`);
-
-    // 3. Migrate kitchen groups
-    const kitchenGroups = legacy.kitchenGroups || {};
-    let migratedGroups = 0;
-
-    db.transaction(() => {
-      for (const [oldCode, groupData] of Object.entries(kitchenGroups)) {
-        if (oldCode === "KITCHEN-491" && (!groupData.members || groupData.members.length === 0)) {
-          log(`⏭️  Skipping empty global default group: ${oldCode}`);
-          continue;
-        }
-
-        const newGroupId = generateId("kg");
-        const newJoinCode = generateJoinCode();
-
-        // Try to find creator — use first member's userId or first user in DB
-        const firstUserId = users[0]?.id || "usr_demo";
-
-        insertGroup.run(
-          newGroupId,
-          groupData.name || "Shared Kitchen",
-          newJoinCode,
-          firstUserId,
-          groupData.createdDate || new Date().toISOString()
-        );
-
-        insertKitchenData.run(
-          newGroupId,
-          JSON.stringify(groupData.roster || []),
-          JSON.stringify(groupData.cashbook || [])
-        );
-
-        if (Array.isArray(groupData.members)) {
-          for (const m of groupData.members) {
-            insertMember.run(
-              generateId("km"),
-              newGroupId,
-              m.userId || null,
-              m.name || m.displayName || "Member",
-              m.role || "MEMBER",
-              m.status || "active"
-            );
-          }
-        }
-
-        migratedGroups++;
-        log(`✅ Migrated kitchen group "${oldCode}" → ${newGroupId} (new join code: ${newJoinCode})`);
-      }
-    })();
-    log(`✅ Migrated ${migratedGroups} kitchen groups`);
-
-    // 4. Mark JSON as migrated
-    fs.renameSync(JSON_LEGACY_PATH, `${JSON_LEGACY_PATH}.migrated`);
-    log("✅ data.db.json renamed to data.db.json.migrated");
-
-    // 5. Write migration log
-    fs.writeFileSync(path.join(__dirname, "migration.log"), logLines.join("\n") + "\n");
-    log("📋 Migration log saved to server/migration.log");
-
-  } catch (err) {
-    console.error("❌ Migration failed:", err.message);
-    console.error("   The original data.db.json is untouched.");
-  }
-}
 
 export default { initDatabase, getDb, generateId, generateJoinCode };

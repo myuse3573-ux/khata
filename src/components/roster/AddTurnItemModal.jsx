@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useKitchen } from "../../context/KitchenContext";
-import { usePersonal } from "../../context/PersonalContext";
+import { useKitchen } from "../../context/useKitchen";
+import { usePersonal } from "../../context/usePersonal";
 import { translations } from "../../utils/translations";
 import { X, RotateCw, CheckSquare, Square, Edit2, User, Plus } from "lucide-react";
 

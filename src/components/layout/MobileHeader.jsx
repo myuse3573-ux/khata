@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { usePersonal } from "../../context/PersonalContext";
-import { useKitchen } from "../../context/KitchenContext";
-import { useAuth } from "../../context/AuthContext";
+import { usePersonal } from "../../context/usePersonal";
+import { useKitchen } from "../../context/useKitchen";
+import { useAuth } from "../../context/useAuth";
 import { BookOpen, ChevronDown, Plus, Lock, LogOut, ChefHat } from "lucide-react";
 import { ServerStatusDot } from "../ui/OnlineStatusBanner";
 import { SyncStatusIndicator } from "../ui/SyncStatusIndicator";

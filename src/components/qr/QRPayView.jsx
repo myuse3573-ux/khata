@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { useKhata } from "../../context/KhataContext";
+import { useKhata } from "../../context/useKhata";
 import { translations } from "../../utils/translations";
 import { formatCurrency } from "../../utils/formatters";
 import { QrCode, Share2, Copy, CheckCircle2, ShieldCheck } from "lucide-react";

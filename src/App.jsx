@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import { PersonalProvider, usePersonal } from "./context/PersonalContext";
-import { KitchenProvider, useKitchen } from "./context/KitchenContext";
+import { AuthProvider } from "./context/AuthContext";
+import { useAuth } from "./context/useAuth";
+import { PersonalProvider } from "./context/PersonalContext";
+import { usePersonal } from "./context/usePersonal";
+import { KitchenProvider } from "./context/KitchenContext";
+import { useKitchen } from "./context/useKitchen";
 import { LoginView } from "./components/auth/LoginView";
 import { LockScreenModal } from "./components/auth/LockScreenModal";
 import { Toast } from "./components/ui/Toast";

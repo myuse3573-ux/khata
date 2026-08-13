@@ -6,11 +6,9 @@
  * Completely separate from PersonalContext — no data leakage possible.
  * Real-time via Server-Sent Events (falls back to polling).
  */
-/* eslint-disable react/only-export-components */
-import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from "react";
-import { useAuth } from "./AuthContext";
-
-const KitchenContext = createContext();
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useAuth } from "./useAuth";
+import { KitchenContext } from "./kitchenContextValue";
 
 const API_BASE = "/api";
 
@@ -593,8 +591,3 @@ export const KitchenProvider = ({ children }) => {
   );
 };
 
-export const useKitchen = () => {
-  const ctx = useContext(KitchenContext);
-  if (!ctx) throw new Error("useKitchen must be used within KitchenProvider");
-  return ctx;
-};

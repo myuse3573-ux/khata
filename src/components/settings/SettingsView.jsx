@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { usePersonal } from "../../context/PersonalContext";
-import { useAuth } from "../../context/AuthContext";
+import { usePersonal } from "../../context/usePersonal";
+import { useAuth } from "../../context/useAuth";
 import { exportBackupData, downloadAsJson, parseImportData } from "../../utils/storage";
 import {
   Store, Globe, Download, Upload, Shield,

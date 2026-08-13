@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useKitchen } from "../../context/KitchenContext";
-import { usePersonal } from "../../context/PersonalContext";
+import { useKitchen } from "../../context/useKitchen";
+import { usePersonal } from "../../context/usePersonal";
 import { translations } from "../../utils/translations";
 import { formatDate } from "../../utils/formatters";
 import {

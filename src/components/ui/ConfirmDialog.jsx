@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import { AlertTriangle, Trash2, X } from "lucide-react";
-
-/* eslint-disable react/only-export-components */
 /**
  * ConfirmDialog — Global confirm modal for destructive actions.
  *
@@ -107,30 +105,4 @@ export const ConfirmDialog = ({
   );
 };
 
-/**
- * useConfirm — hook for easy confirm dialog management
- *
- * const { confirm, ConfirmUI } = useConfirm();
- * confirm({ title, description, onConfirm });
- * return <>{ConfirmUI}</>;
- */
-export const useConfirm = () => {
-  const [state, setConfirmState] = React.useState(null);
-
-  const confirm = (opts) => setConfirmState(opts);
-
-  const ConfirmUI = state ? (
-    <ConfirmDialog
-      isOpen={true}
-      title={state.title}
-      description={state.description}
-      confirmLabel={state.confirmLabel}
-      cancelLabel={state.cancelLabel}
-      variant={state.variant}
-      onConfirm={state.onConfirm}
-      onClose={() => setConfirmState(null)}
-    />
-  ) : null;
-
-  return { confirm, ConfirmUI };
-};
+// Hook moved to `src/components/ui/useConfirm.jsx` to keep this file exporting only components.

@@ -5,11 +5,9 @@
  *
  * Strictly scoped to the authenticated userId — never touches kitchen data.
  */
-/* eslint-disable react/only-export-components */
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { useAuth } from "./AuthContext";
-
-const PersonalContext = createContext();
+import React, { useState, useEffect, useCallback } from "react";
+import { useAuth } from "./useAuth";
+import { PersonalContext } from "./personalContextValue";
 
 const API_BASE = "/api";
 
@@ -370,9 +368,4 @@ export const PersonalProvider = ({ children }) => {
     </PersonalContext.Provider>
   );
 };
-
-export const usePersonal = () => {
-  const ctx = useContext(PersonalContext);
-  if (!ctx) throw new Error("usePersonal must be used within PersonalProvider");
-  return ctx;
-};
+ 

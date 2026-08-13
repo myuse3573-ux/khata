@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useKitchen } from "../../context/KitchenContext";
 import {
   ChefHat, Plus, UserPlus, LogOut, Users, Copy, Check,
   Share2, QrCode, Crown, Shield, User, Pause, Play,
   ChevronRight, AlertCircle, Loader2, RefreshCw
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import { useConfirm } from "../ui/ConfirmDialog";
+import { useConfirm } from "../ui/useConfirm";
+import { useKitchen } from "../../context/useKitchen";
 
 export const KitchenGroupScreen = () => {
   const {

@@ -30,9 +30,8 @@ server/*.db
 server/*.db-shm
 server/*.db-wal
 
-# Migration artifacts (keep backups, not the live DB)
-server/*.migrated
-server/migration.log
+# Temporary / IDE / scanner artifacts
+.codesight/
+artifacts/
+temp_root.html
 
-# Old flat JSON database (migrated)
-server/data.db.json

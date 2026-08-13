@@ -1,7 +1,5 @@
-/* eslint-disable react/only-export-components */
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-
-const AuthContext = createContext();
+import React, { useState, useEffect, useCallback } from "react";
+import { AuthContext } from "./authContextValue";
 
 const API_BASE = "/api";
 
@@ -278,10 +276,4 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
 };

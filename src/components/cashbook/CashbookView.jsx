@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useKhata } from "../../context/KhataContext";
+import { useKhata } from "../../context/useKhata";
 import { translations } from "../../utils/translations";
 import { formatCurrency, formatDate } from "../../utils/formatters";
 import {
