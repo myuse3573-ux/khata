@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
-import { Store, Lock, Globe, RefreshCw } from 'lucide-react-native';
+import { Store, Lock, Globe } from 'lucide-react-native';
 
 interface NativeHeaderProps {
   shopName: string;

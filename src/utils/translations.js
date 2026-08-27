@@ -80,8 +80,10 @@ export const translations = {
     cashNote: "Category / Expense Details",
 
     // Reports
+    reportsTitle: "Reports & Statements",
     businessReport: "Business Statement",
     customerStatement: "Customer Account Statement",
+    exportExcel: "Export Excel/CSV",
     dateRange: "Select Period",
     today: "Today",
     thisWeek: "This Week",
@@ -201,8 +203,10 @@ export const translations = {
     cashNote: "विवरण",
 
     // Reports
+    reportsTitle: "रिपोर्ट्स और स्टेटमेंट",
     businessReport: "बिजनेस रिपोर्ट",
     customerStatement: "खाता स्टेटमेंट",
+    exportExcel: "एक्सेल डाउनलोड",
     dateRange: "समय चुनें",
     today: "आज",
     thisWeek: "इस हफ्ते",
@@ -322,8 +326,10 @@ export const translations = {
     cashNote: "Detail",
 
     // Reports
+    reportsTitle: "Reports & Khata Statement",
     businessReport: "Khata Report",
     customerStatement: "Member Statement",
+    exportExcel: "Excel Download",
     dateRange: "Select Date",
     today: "Aaj",
     thisWeek: "Is Hafte",

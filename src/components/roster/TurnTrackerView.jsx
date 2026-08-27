@@ -306,7 +306,7 @@ export const TurnTrackerView = () => {
             </div>
 
             <button
-              onClick={() => leaveKitchenGroup()}
+              onClick={() => leaveKitchenGroup(activeGroup?.id)}
               className="text-slate-400 hover:text-rose-400 text-xs font-bold p-1.5 rounded-xl hover:bg-slate-800 transition-colors flex items-center gap-1"
               title="Disconnect Kitchen Group"
             >

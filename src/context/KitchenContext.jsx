@@ -12,7 +12,7 @@ import { KitchenContext } from "./kitchenContextValue";
 import { getApiBaseUrl } from "../config/api";
 
 const API_BASE = getApiBaseUrl();
-const isLocalSessionToken = (value) => value?.startsWith("token_demo_") || value?.startsWith("token_local_");
+const isLocalSessionToken = (value) => value?.startsWith("token_");
 
 export const KitchenProvider = ({ children }) => {
   const { user, token, isAuthenticated, logout } = useAuth();
@@ -190,7 +190,10 @@ export const KitchenProvider = ({ children }) => {
       const res = await fetch(`${API_BASE}/kitchen/${groupId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      if (res.status === 401) { logout(); return; }
+      if (res.status === 401) {
+        if (isLocalSessionToken(token)) return;
+        logout(); return;
+      }
       if (res.status === 403) {
         // No longer a member — clear
         clearKitchenState();
@@ -230,7 +233,10 @@ export const KitchenProvider = ({ children }) => {
         body: JSON.stringify({ name })
       });
       const data = await res.json();
-      if (res.status === 401) { logout(); return null; }
+      if (res.status === 401) {
+        if (isLocalSessionToken(token)) { showToast("Kitchen groups require the cloud server.", "error"); return null; }
+        logout(); return null;
+      }
       if (res.ok && data.status === "success") {
         const newGroup = { ...data.group, memberCount: 1 };
         setMyGroups(prev => [newGroup, ...prev]);
@@ -257,7 +263,10 @@ export const KitchenProvider = ({ children }) => {
         body: JSON.stringify({ joinCode: joinCode.trim().toUpperCase() })
       });
       const data = await res.json();
-      if (res.status === 401) { logout(); return null; }
+      if (res.status === 401) {
+        if (isLocalSessionToken(token)) { showToast("Kitchen groups require the cloud server.", "error"); return null; }
+        logout(); return null;
+      }
       if (res.ok && data.status === "success") {
         const joinedGroup = { ...data.group };
         setMyGroups(prev => {
@@ -285,7 +294,10 @@ export const KitchenProvider = ({ children }) => {
         headers: authHeaders()
       });
       const data = await res.json();
-      if (res.status === 401) { logout(); return false; }
+      if (res.status === 401) {
+        if (isLocalSessionToken(token)) return false;
+        logout(); return false;
+      }
       if (res.ok) {
         stopRealtime();
         setMyGroups(prev => prev.filter(g => g.id !== groupId));
@@ -319,7 +331,10 @@ export const KitchenProvider = ({ children }) => {
         headers: authHeaders(),
         body: JSON.stringify(payload)
       });
-      if (res.status === 401) { logout(); return; }
+      if (res.status === 401) {
+        if (isLocalSessionToken(token)) return;
+        logout(); return;
+      }
       if (res.ok) setKitchenSyncStatus("synced");
       else setKitchenSyncStatus("failed");
     } catch {
@@ -356,7 +371,10 @@ export const KitchenProvider = ({ children }) => {
         headers: authHeaders(),
         body: JSON.stringify({ memberId: member.id || memberId, status: newStatus })
       });
-      if (res.status === 401) { logout(); return; }
+      if (res.status === 401) {
+        if (isLocalSessionToken(token)) return;
+        logout(); return;
+      }
       const data = await res.json();
       if (!res.ok) {
         setMembers(prev => prev.map(m => (m.id === member.id || m.id === memberId) ? { ...m, status: member.status } : m));
@@ -499,6 +517,7 @@ export const KitchenProvider = ({ children }) => {
   // ── Invite ────────────────────────────────────────────────────────────────
   const getInviteInfo = async () => {
     if (!activeGroup?.id) return null;
+    if (isLocalSessionToken(token)) return null;
     try {
       const res = await fetch(`${API_BASE}/kitchen/${activeGroup.id}/invite`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -523,7 +542,10 @@ export const KitchenProvider = ({ children }) => {
         body: JSON.stringify({ name: name.trim(), phone: phone.trim() })
       });
       const data = await res.json();
-      if (res.status === 401) { logout(); return null; }
+      if (res.status === 401) {
+        if (isLocalSessionToken(token)) { showToast("Kitchen groups require the cloud server.", "error"); return null; }
+        logout(); return null;
+      }
       if (res.ok && data.member) {
         setMembers(prev => [...prev, data.member]);
         showToast(`Added "${name}" to kitchen group!`);
@@ -549,7 +571,10 @@ export const KitchenProvider = ({ children }) => {
         body: JSON.stringify({ memberId })
       });
       const data = await res.json();
-      if (res.status === 401) { logout(); return false; }
+      if (res.status === 401) {
+        if (isLocalSessionToken(token)) return false;
+        logout(); return false;
+      }
       if (res.ok) {
         setMembers(prev => prev.filter(m => m.id !== memberId && m.userId !== memberId));
         setRoster(prev => prev.map(item => ({

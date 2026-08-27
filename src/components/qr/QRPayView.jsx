@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { useKhata } from "../../context/useKhata";
 import { translations } from "../../utils/translations";
-import { formatCurrency } from "../../utils/formatters";
+import { formatCurrency, calculateCustomerBalance } from "../../utils/formatters";
 import { QrCode, Share2, Copy, CheckCircle2, ShieldCheck } from "lucide-react";
 
 export const QRPayView = () => {
-  const { business, customers, settings, showToast } = useKhata();
+  const { business, customers, transactions, settings, showToast } = useKhata();
   const t = translations[settings.lang] || translations.en;
 
   const [amount, setAmount] = useState("500");
@@ -71,19 +71,27 @@ export const QRPayView = () => {
                 setSelectedCustId(id);
                 if (id) {
                   const cust = customers.find((c) => c.id === id);
-                  if (cust && cust.balance) {
-                    setAmount(Math.abs(cust.balance).toString());
+                  if (cust) {
+                    const custTxs = transactions.filter((tx) => tx.customerId === cust.id);
+                    const { balance } = calculateCustomerBalance(custTxs);
+                    if (balance > 0) {
+                      setAmount(balance.toString());
+                    }
                   }
                 }
               }}
               className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 max-w-xs mx-auto"
             >
               <option value="">General Payment QR</option>
-              {customers.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} {c.balance ? `(₹${Math.abs(c.balance)})` : ""}
-                </option>
-              ))}
+              {customers.map((c) => {
+                const custTxs = transactions.filter((tx) => tx.customerId === c.id);
+                const { balance } = calculateCustomerBalance(custTxs);
+                return (
+                  <option key={c.id} value={c.id}>
+                    {c.name} {balance > 0 ? `(₹${balance})` : ""}
+                  </option>
+                );
+              })}
             </select>
           </div>
         )}

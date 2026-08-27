@@ -15,7 +15,6 @@ interface HomeScreenProps {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
   customers,
-  transactions,
   todayDuty,
   onNavigateTab,
   onAddCustomerPress,

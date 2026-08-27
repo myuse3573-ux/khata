@@ -18,7 +18,6 @@ export const KhataScreen: React.FC<KhataScreenProps> = ({
   cashbook,
   onSelectCustomer,
   onAddCustomer,
-  onAddTransaction,
   onAddCashbookEntry
 }) => {
   const [activeSubTab, setActiveSubTab] = useState<'customers' | 'cashbook'>('customers');

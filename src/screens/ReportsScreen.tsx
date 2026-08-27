@@ -17,8 +17,7 @@ export const ReportsScreen: React.FC<ReportsScreenProps> = ({
   user,
   customers,
   transactions,
-  cashbook,
-  kitchenExpenses
+  cashbook
 }) => {
   let totalGetPaise = 0;
   let totalGivePaise = 0;

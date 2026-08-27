@@ -1,5 +1,5 @@
 import jsPDF from "jspdf";
-import "jspdf-autotable";
+import { autoTable } from "jspdf-autotable";
 import { formatCurrency, formatDate, calculateCustomerBalance } from "./formatters";
 
 export const generateCustomerPDF = ({ customer, transactions, business }) => {
@@ -90,7 +90,7 @@ export const generateCustomerPDF = ({ customer, transactions, business }) => {
     .reduce((sum, t) => sum + Number(t.amount || 0), 0);
 
   // AutoTable
-  doc.autoTable({
+  autoTable(doc, {
     startY: 90,
     head: [["#", "Date & Time", "Details / Note", "Mode", "You Gave (₹)", "You Got (₹)"]],
     body: tableRows,
@@ -124,7 +124,7 @@ export const generateCustomerPDF = ({ customer, transactions, business }) => {
   doc.text(`Authorized Signature: ${business.owner || business.name}`, 140, finalY);
   doc.line(140, finalY + 2, 190, finalY + 2);
 
-  doc.save(`${customer.name.replace(/\s+/g, "_")}_Ledger_Statement.pdf`);
+  doc.save(`${(customer.name || "Statement").replace(/\s+/g, "_")}_Ledger_Statement.pdf`);
 };
 
 export const generateBusinessReportPDF = ({ customers, transactions, cashbook, business }) => {
@@ -188,13 +188,13 @@ export const generateBusinessReportPDF = ({ customers, transactions, cashbook, b
       idx + 1,
       cust.name,
       cust.phone || "N/A",
-      cust.type.toUpperCase(),
+      (cust.type || "customer").toUpperCase(),
       custTxs.length,
       statusFormatted
     ];
   });
 
-  doc.autoTable({
+  autoTable(doc, {
     startY: 82,
     head: [["#", "Customer Name", "Phone", "Type", "Entries", "Net Balance"]],
     body: customerRows,

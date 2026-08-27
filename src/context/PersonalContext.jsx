@@ -13,7 +13,7 @@ import { firestoreService } from "../services/firestoreService";
 import { isFirebaseConfigured } from "../config/firebase";
 
 const API_BASE = getApiBaseUrl();
-const isLocalSessionToken = (value) => value?.startsWith("token_demo_") || value?.startsWith("token_local_");
+const isLocalSessionToken = (value) => value?.startsWith("token_");
 
 // ── Storage helpers (user-scoped) ──────────────────────────────────────────
 const loadLocal = (userId, key, fallback) => {
@@ -359,18 +359,20 @@ export const PersonalProvider = ({ children }) => {
     saveLocal(userId, "cashbook", nextCashbook);
     saveLocal(userId, "settings", nextSettings);
 
-    fetch(`${API_BASE}/personal/sync`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({
-        business: nextBusiness,
-        books: nextBooks,
-        customers: nextCustomers,
-        transactions: nextTransactions,
-        cashbook: nextCashbook,
-        settings: nextSettings
-      })
-    }).catch(() => {});
+    if (token && !isLocalSessionToken(token)) {
+      fetch(`${API_BASE}/personal/sync`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          business: nextBusiness,
+          books: nextBooks,
+          customers: nextCustomers,
+          transactions: nextTransactions,
+          cashbook: nextCashbook,
+          settings: nextSettings
+        })
+      }).catch(() => {});
+    }
   };
 
   return (

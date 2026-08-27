@@ -11,12 +11,11 @@ interface QRPayScreenProps {
   onScannedCode: (code: string) => void;
 }
 
-export const QRPayScreen: React.FC<QRPayScreenProps> = ({ user, currentGroup, onScannedCode }) => {
+export const QRPayScreen: React.FC<QRPayScreenProps> = ({ user, onScannedCode }) => {
   const [activeTab, setActiveTab] = useState<'my_qr' | 'scan'>('my_qr');
   const [upiId, setUpiId] = useState('9876543210@upi');
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const qrValue = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(user.name || 'Merchant')}&cu=INR`;
 

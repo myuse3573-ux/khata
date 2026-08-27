@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { Customer, Transaction, CashbookEntry, KitchenGroup, KitchenMember, KitchenDuty, SyncOperation } from '../types';
+import { Customer, Transaction, CashbookEntry, SyncOperation } from '../types';
 
 let dbInstance: SQLite.SQLiteDatabase | null = null;
 

@@ -5,7 +5,7 @@ import { firestoreService } from "../services/firestoreService";
 import { isFirebaseConfigured } from "../config/firebase";
 
 const API_BASE = getApiBaseUrl();
-const isLocalSessionToken = (value) => value?.startsWith("token_demo_") || value?.startsWith("token_local_");
+const isLocalSessionToken = (value) => value?.startsWith("token_");
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -96,27 +96,7 @@ export const AuthProvider = ({ children }) => {
     const cleanIdentifier = identifier.trim();
     const cleanPassword = password.trim();
 
-    // 1. Try local/cloud backend server first
-    try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier: cleanIdentifier, password: cleanPassword })
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.status === "success") {
-        saveSession(data.token, data.user);
-        setIsLocked(false);
-        setIsLoading(false);
-        return { success: true };
-      }
-    } catch {
-      // Backend server unavailable — proceed to Firestore / Local DB lookup
-    }
-
-    // 2. Firestore Cloud Database Lookup
+    // 1. Firestore Cloud Database Lookup (primary backend — Firebase)
     if (isFirebaseConfigured()) {
       try {
         // Look up user by phone or email in Firestore
@@ -137,7 +117,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
 
-    // 3. Local offline cache fallback
+    // 2. Local offline cache fallback
     const savedUserStr = localStorage.getItem("khata_user");
     if (savedUserStr) {
       try {
@@ -149,6 +129,26 @@ export const AuthProvider = ({ children }) => {
           return { success: true, isOffline: true };
         }
       } catch { /* parse error */ }
+    }
+
+    // 3. Legacy MongoDB server fallback (only if still in use)
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier: cleanIdentifier, password: cleanPassword })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.status === "success") {
+        saveSession(data.token, data.user);
+        setIsLocked(false);
+        setIsLoading(false);
+        return { success: true };
+      }
+    } catch {
+      // Backend server unavailable — proceed to error
     }
 
     const errorMsg = "No account found matching this phone or email. Please check your credentials or register a New Account.";

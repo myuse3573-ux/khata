@@ -50,8 +50,8 @@ export const DashboardView = ({ onSelectCustomer, onOpenAddCustomer, onOpenAddTx
   // Filter customers by search term and tab filter
   const filteredCustomers = customersWithBalance.filter((c) => {
     const matchesSearch =
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.phone.includes(searchTerm);
+      (c.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (c.phone || "").includes(searchTerm);
 
     if (!matchesSearch) return false;
 
@@ -250,7 +250,7 @@ export const DashboardView = ({ onSelectCustomer, onOpenAddCustomer, onOpenAddTx
                     />
                   ) : (
                     <div className="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-800 font-extrabold flex items-center justify-center text-base shrink-0">
-                      {customer.name.substring(0, 2).toUpperCase()}
+                      {(customer.name || "").substring(0, 2).toUpperCase()}
                     </div>
                   )}
 

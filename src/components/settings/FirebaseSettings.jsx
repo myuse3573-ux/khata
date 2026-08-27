@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { isFirebaseConfigured, firebaseConfig, db } from "../../config/firebase";
+import { isFirebaseConfigured, firebaseConfig } from "../../config/firebase";
 import { firestoreService } from "../../services/firestoreService";
 import { usePersonal } from "../../context/usePersonal";
 import { useAuth } from "../../context/useAuth";
