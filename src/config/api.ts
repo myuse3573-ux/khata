@@ -4,7 +4,10 @@
  */
 
 // Production Cloud Backend URL (Render Production Web Service)
-export const CLOUD_API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://khata-backend.onrender.com/api';
+export const CLOUD_API_URL =
+  import.meta.env?.VITE_API_URL ||
+  import.meta.env?.EXPO_PUBLIC_API_URL ||
+  'https://khata-backend.onrender.com/api';
 export const LOCAL_API_URL = 'http://localhost:5000/api';
 
 export const getApiBaseUrl = (): string => {

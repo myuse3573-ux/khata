@@ -63,7 +63,7 @@ export const DashboardView = ({ onSelectCustomer, onOpenAddCustomer, onOpenAddTx
   });
 
   return (
-    <div className="pb-28 pt-2 px-3 max-w-2xl mx-auto space-y-4">
+    <div className="pb-36 pt-2 px-3 max-w-2xl mx-auto space-y-4">
       
       {/* 1. Summary Metrics Cards */}
       <div className="grid grid-cols-2 gap-2.5">

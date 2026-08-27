@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "378776315707",
+    "firebase_url": "https://kitchen-khata-default-rtdb.firebaseio.com",
+    "project_id": "kitchen-khata",
+    "storage_bucket": "kitchen-khata.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378776315707:android:609578564f1aba2988391e",
+        "android_client_info": {
+          "package_name": "com.khata.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "378776315707-en8a8vq1qluk4jmlq14q6hnj1r4d78d5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKWO3EBQiltm84EUym2pqo-dZ17e3NCQE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "378776315707-en8a8vq1qluk4jmlq14q6hnj1r4d78d5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

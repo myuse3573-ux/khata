@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { WifiOff, RefreshCw } from "lucide-react";
 import { getApiBaseUrl } from "../../config/api";
+import { isFirebaseConfigured } from "../../config/firebase";
 
 /**
  * OnlineStatusBanner
- * Shows a persistent banner when the server is unreachable.
- * Distinguishes between:
- *   - "No internet" (navigator.onLine = false)
- *   - "Server offline" (internet ok, but /api/health fails)
+ * Shows a persistent banner when completely offline (no internet and no server/cloud).
  */
 export const OnlineStatusBanner = () => {
   const [serverStatus, setServerStatus] = useState("checking"); // 'online' | 'offline' | 'checking'
@@ -17,6 +15,22 @@ export const OnlineStatusBanner = () => {
 
   const checkServer = useCallback(async () => {
     setIsRetrying(true);
+    // If device is offline (no internet)
+    if (!navigator.onLine) {
+      setServerStatus("offline");
+      setIsVisible(true);
+      setIsRetrying(false);
+      return;
+    }
+
+    // If Firebase Firestore is active and device has internet
+    if (isFirebaseConfigured()) {
+      setServerStatus("online");
+      setIsVisible(false);
+      setIsRetrying(false);
+      return;
+    }
+
     try {
       const res = await fetch(`${getApiBaseUrl()}/health`, {
         signal: AbortSignal.timeout(4000) // 4s timeout
@@ -95,6 +109,10 @@ export const ServerStatusDot = () => {
 
   useEffect(() => {
     const check = async () => {
+      if (isFirebaseConfigured() && navigator.onLine) {
+        setStatus("online");
+        return;
+      }
       try {
         const res = await fetch(`${getApiBaseUrl()}/health`, { signal: AbortSignal.timeout(3000) });
         setStatus(res.ok ? "online" : "offline");

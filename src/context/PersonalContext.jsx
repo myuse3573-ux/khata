@@ -9,8 +9,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "./useAuth";
 import { PersonalContext } from "./personalContextValue";
 import { getApiBaseUrl } from "../config/api";
+import { firestoreService } from "../services/firestoreService";
+import { isFirebaseConfigured } from "../config/firebase";
 
 const API_BASE = getApiBaseUrl();
+const isLocalSessionToken = (value) => value?.startsWith("token_demo_") || value?.startsWith("token_local_");
 
 // ── Storage helpers (user-scoped) ──────────────────────────────────────────
 const loadLocal = (userId, key, fallback) => {
@@ -78,6 +81,25 @@ export const PersonalProvider = ({ children }) => {
     const loadData = async () => {
       setIsLoading(true);
 
+      const loadCachedData = () => {
+        const biz = loadLocal(userId, "business", emptyBusiness(user));
+        const bks = loadLocal(userId, "books", [{ id: `book_${userId}_1`, name: "Main Khata", isDefault: true }]);
+        setBusiness(biz);
+        setBooks(bks);
+        setActiveBookId(bks[0]?.id || "");
+        setCustomers(loadLocal(userId, "customers", []));
+        setTransactions(loadLocal(userId, "transactions", []));
+        setCashbook(loadLocal(userId, "cashbook", []));
+        setSettings(loadLocal(userId, "settings", { lang: "en", pin: "", theme: "light" }));
+        setSyncStatus("pending");
+      };
+
+      if (isLocalSessionToken(token)) {
+        loadCachedData();
+        setIsLoading(false);
+        return;
+      }
+
       // Try fetching from server first
       try {
         const res = await fetch(`${API_BASE}/personal`, {
@@ -116,19 +138,12 @@ export const PersonalProvider = ({ children }) => {
             saveLocal(userId, "settings", db.settings || { lang: "en", pin: "", theme: "light" });
             setSyncStatus("synced");
           }
+        } else {
+          loadCachedData();
         }
       } catch {
         // Server offline — use local cache
-        const biz = loadLocal(userId, "business", emptyBusiness(user));
-        const bks = loadLocal(userId, "books", [{ id: `book_${userId}_1`, name: "Main Khata", isDefault: true }]);
-        setBusiness(biz);
-        setBooks(bks);
-        setActiveBookId(bks[0]?.id || "");
-        setCustomers(loadLocal(userId, "customers", []));
-        setTransactions(loadLocal(userId, "transactions", []));
-        setCashbook(loadLocal(userId, "cashbook", []));
-        setSettings(loadLocal(userId, "settings", { lang: "en", pin: "", theme: "light" }));
-        setSyncStatus("pending");
+        loadCachedData();
       }
 
       setIsLoading(false);
@@ -137,22 +152,42 @@ export const PersonalProvider = ({ children }) => {
     loadData();
   }, [userId, token, isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── Sync helper — saves locally + pushes to server ────────────────────
+  // ── Sync helper — saves locally + pushes to server & Firestore ──────────
   const syncField = useCallback(async (field, value) => {
-    if (!userId || !token) return;
+    if (!userId) return;
     saveLocal(userId, field, value);
     setSyncStatus("pending");
-    try {
-      const res = await fetch(`${API_BASE}/personal/sync`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ [field]: value })
-      });
-      if (res.status === 401) { logout(); return; }
-      if (res.ok) setSyncStatus("synced");
-      else setSyncStatus("failed");
-    } catch {
-      setSyncStatus("failed");
+
+    // 1. Sync to local/express server if token exists
+    if (token && !isLocalSessionToken(token)) {
+      try {
+        const res = await fetch(`${API_BASE}/personal/sync`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ [field]: value })
+        });
+        if (res.status === 401) { logout(); return; }
+        if (res.ok) setSyncStatus("synced");
+      } catch {
+        // Continue to firestore sync
+      }
+    }
+
+    // 2. Automatically sync to Cloud Firestore in background
+    if (isFirebaseConfigured()) {
+      try {
+        if (field === "business" || field === "settings" || field === "books") {
+          await firestoreService.setDocument(`users/${userId}/profile`, field, {
+            data: value,
+            updatedAt: new Date().toISOString()
+          });
+        } else if (Array.isArray(value)) {
+          await firestoreService.syncBatch(`users/${userId}/${field}`, value);
+        }
+        setSyncStatus("synced");
+      } catch (err) {
+        console.warn(`[Firebase] Firestore sync for ${field}:`, err.message);
+      }
     }
   }, [userId, token, logout]);
 

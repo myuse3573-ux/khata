@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { AuthContext } from "./authContextValue";
 import { getApiBaseUrl } from "../config/api";
+import { firestoreService } from "../services/firestoreService";
+import { isFirebaseConfigured } from "../config/firebase";
 
 const API_BASE = getApiBaseUrl();
+const isLocalSessionToken = (value) => value?.startsWith("token_demo_") || value?.startsWith("token_local_");
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -22,6 +25,18 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
+      // Local/demo sessions are intentionally not sent to the API.
+      if (isLocalSessionToken(savedToken)) {
+        try {
+          setToken(savedToken);
+          setUser(JSON.parse(savedUser));
+        } catch {
+          clearLocalSession();
+        }
+        setIsLoading(false);
+        return;
+      }
+
       // Validate token against server or fallback to local cache
       try {
         const res = await fetch(`${API_BASE}/auth/me`, {
@@ -33,7 +48,14 @@ export const AuthProvider = ({ children }) => {
           setToken(savedToken);
           setUser(data.user);
         } else {
-          clearLocalSession();
+          // Restore from cached user seamlessly
+          try {
+            const cached = JSON.parse(savedUser);
+            setToken(savedToken);
+            setUser(cached);
+          } catch {
+            clearLocalSession();
+          }
         }
       } catch {
         // Server offline — restore from local cache seamlessly
@@ -74,6 +96,7 @@ export const AuthProvider = ({ children }) => {
     const cleanIdentifier = identifier.trim();
     const cleanPassword = password.trim();
 
+    // 1. Try local/cloud backend server first
     try {
       const res = await fetch(`${API_BASE}/auth/login`, {
         method: "POST",
@@ -88,30 +111,50 @@ export const AuthProvider = ({ children }) => {
         setIsLocked(false);
         setIsLoading(false);
         return { success: true };
-      } else {
-        const errorMsg = data.error || "Invalid phone number/email or password. Please check your credentials or create a New Account.";
-        setAuthError(errorMsg);
-        setIsLoading(false);
-        return { success: false, error: errorMsg };
       }
     } catch {
-      // Server unreachable: Check if this user has a previously saved local offline session
-      const savedUserStr = localStorage.getItem("khata_user");
-      if (savedUserStr) {
-        try {
-          const savedUser = JSON.parse(savedUserStr);
-          if (savedUser && (savedUser.phone === cleanIdentifier || savedUser.email === cleanIdentifier)) {
-            setIsLocked(false);
-            setIsLoading(false);
-            return { success: true, isOffline: true };
-          }
-        } catch { /* parse error */ }
-      }
-      const errorMsg = "Server unreachable. No local account found for this phone/email. Please register a New Account.";
-      setAuthError(errorMsg);
-      setIsLoading(false);
-      return { success: false, error: errorMsg };
+      // Backend server unavailable — proceed to Firestore / Local DB lookup
     }
+
+    // 2. Firestore Cloud Database Lookup
+    if (isFirebaseConfigured()) {
+      try {
+        // Look up user by phone or email in Firestore
+        const allUsers = await firestoreService.getCollection("users");
+        const found = allUsers.find(
+          (u) => u.phone === cleanIdentifier || u.email?.toLowerCase() === cleanIdentifier.toLowerCase()
+        );
+
+        if (found) {
+          const sessionToken = "token_fs_" + found.id + "_" + Date.now();
+          saveSession(sessionToken, found);
+          setIsLocked(false);
+          setIsLoading(false);
+          return { success: true };
+        }
+      } catch (err) {
+        console.warn("[Firebase] Firestore login lookup error:", err.message);
+      }
+    }
+
+    // 3. Local offline cache fallback
+    const savedUserStr = localStorage.getItem("khata_user");
+    if (savedUserStr) {
+      try {
+        const savedUser = JSON.parse(savedUserStr);
+        if (savedUser && (savedUser.phone === cleanIdentifier || savedUser.email === cleanIdentifier)) {
+          saveSession("token_local_" + Date.now(), savedUser);
+          setIsLocked(false);
+          setIsLoading(false);
+          return { success: true, isOffline: true };
+        }
+      } catch { /* parse error */ }
+    }
+
+    const errorMsg = "No account found matching this phone or email. Please check your credentials or register a New Account.";
+    setAuthError(errorMsg);
+    setIsLoading(false);
+    return { success: false, error: errorMsg };
   };
 
   // ── Register ─────────────────────────────────────────────────────────────
@@ -119,42 +162,60 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     setAuthError("");
 
+    const userId = "usr_" + (phone || email?.replace(/[^a-zA-Z0-9]/g, "") || Date.now());
+    const newUser = {
+      id: userId,
+      name: name || "Khata User",
+      phone: phone || "",
+      email: email || "",
+      shopName: shopName || `${name || "User"}'s Khata`,
+      createdAt: new Date().toISOString()
+    };
+    const sessionToken = "token_" + Date.now();
+
+    // 1. Save to Cloud Firestore Database
+    if (isFirebaseConfigured()) {
+      try {
+        await firestoreService.setDocument("users", userId, newUser);
+        // Initialize user business profile in Firestore
+        await firestoreService.setDocument(`users/${userId}/profile`, "business", {
+          id: `b_${userId}`,
+          name: newUser.shopName,
+          owner: newUser.name,
+          phone: newUser.phone,
+          address: "",
+          upiId: "",
+          gstin: "",
+          createdDate: new Date().toISOString()
+        });
+      } catch (err) {
+        console.warn("[Firebase] Error creating user in Firestore:", err.message);
+      }
+    }
+
+    // 2. Try server registration if online
     try {
       const res = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, phone, email, password, shopName })
       });
-
       const data = await res.json();
-
       if (res.ok && data.status === "success") {
         saveSession(data.token, data.user);
         setIsLocked(false);
         setIsLoading(false);
         return { success: true };
-      } else {
-        setAuthError(data.error || "Registration failed. Please try again.");
-        setIsLoading(false);
-        return { success: false, error: data.error };
       }
     } catch {
-      // Server unreachable / Offline Mode Fallback
-      const offlineUser = {
-        id: "usr_offline_" + Date.now(),
-        name: name || "Khata User",
-        phone: phone || "9876543210",
-        email: email || "",
-        shopName: shopName || "My Khata Store",
-        isOfflineMode: true,
-        createdAt: new Date().toISOString()
-      };
-      const offlineToken = "offline_session_token_" + Date.now();
-      saveSession(offlineToken, offlineUser);
-      setIsLocked(false);
-      setIsLoading(false);
-      return { success: true, isOffline: true };
+      // Backend offline — proceed with Firestore / Local user
     }
+
+    // Save session locally and complete login
+    saveSession(sessionToken, newUser);
+    setIsLocked(false);
+    setIsLoading(false);
+    return { success: true };
   };
 
   // ── Forgot Password (Request OTP) ─────────────────────────────────────────
@@ -275,7 +336,20 @@ export const AuthProvider = ({ children }) => {
   });
 
   const loginAsDemo = async () => {
-    return login("9876543210", "1234");
+    setIsLoading(true);
+    setAuthError("");
+    const demoUser = {
+      id: "usr_demo_admin",
+      name: "Rajesh Sharma",
+      phone: "9876543210",
+      email: "demo@khata.app",
+      shopName: "Sharma General Store",
+      createdAt: new Date().toISOString()
+    };
+    saveSession("token_demo_" + Date.now(), demoUser);
+    setIsLocked(false);
+    setIsLoading(false);
+    return { success: true };
   };
 
   return (

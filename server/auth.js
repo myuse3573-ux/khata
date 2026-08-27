@@ -1,10 +1,11 @@
 /**
  * server/auth.js
  * JWT authentication middleware and kitchen group authorization middleware
+ * Updated to use MongoDB / Mongoose (replaces SQLite getDb())
  */
 
 import jwt from "jsonwebtoken";
-import { getDb } from "./db.js";
+import { KitchenMember } from "./models/KitchenMember.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "khata_dev_secret_change_in_production";
 const JWT_EXPIRY = process.env.JWT_EXPIRY || "30d";
@@ -48,39 +49,42 @@ export function authenticateToken(req, res, next) {
  * @param {string|null} minRole - Minimum role required: null|'MEMBER'|'ADMIN'|'OWNER'
  */
 export function requireKitchenMember(minRole = null) {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     const groupId = req.params.groupId || req.params.id;
     if (!groupId) {
       return res.status(400).json({ error: "Group ID is required." });
     }
 
-    const db = getDb();
-    const member = db.prepare(`
-      SELECT km.role, km.status
-      FROM kitchen_members km
-      WHERE km.group_id = ? AND km.user_id = ?
-    `).get(groupId, req.userId);
+    try {
+      const member = await KitchenMember.findOne({
+        group_id: groupId,
+        user_id: req.userId
+      });
 
-    if (!member) {
-      return res.status(403).json({ error: "You are not a member of this kitchen group." });
-    }
-
-    // Role hierarchy check
-    if (minRole) {
-      const roleOrder = { MEMBER: 1, ADMIN: 2, OWNER: 3 };
-      const userRoleLevel = roleOrder[member.role] || 0;
-      const requiredLevel = roleOrder[minRole] || 0;
-      if (userRoleLevel < requiredLevel) {
-        return res.status(403).json({
-          error: `This action requires ${minRole} role. You are a ${member.role}.`
-        });
+      if (!member) {
+        return res.status(403).json({ error: "You are not a member of this kitchen group." });
       }
-    }
 
-    req.kitchenGroupId = groupId;
-    req.kitchenRole = member.role;
-    req.kitchenMemberStatus = member.status;
-    next();
+      // Role hierarchy check
+      if (minRole) {
+        const roleOrder = { MEMBER: 1, ADMIN: 2, OWNER: 3 };
+        const userRoleLevel = roleOrder[member.role] || 0;
+        const requiredLevel = roleOrder[minRole] || 0;
+        if (userRoleLevel < requiredLevel) {
+          return res.status(403).json({
+            error: `This action requires ${minRole} role. You are a ${member.role}.`
+          });
+        }
+      }
+
+      req.kitchenGroupId = groupId;
+      req.kitchenRole = member.role;
+      req.kitchenMemberStatus = member.status;
+      next();
+    } catch (err) {
+      console.error("requireKitchenMember error:", err);
+      res.status(500).json({ error: "Authorization check failed." });
+    }
   };
 }
 

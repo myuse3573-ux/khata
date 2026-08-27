@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Home, BookOpen, Utensils, FileText, MoreHorizontal } from 'lucide-react-native';
 
-export type TabType = 'home' | 'khata' | 'kitchen' | 'reports' | 'more';
+export type TabType = 'home' | 'khata' | 'kitchen' | 'qr' | 'reports' | 'more';
 
 interface NativeBottomNavProps {
   activeTab: TabType;

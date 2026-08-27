@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/useAuth";
-import { Lock, Phone, Mail, User, Store, ShieldCheck, ArrowRight, KeyRound, Sparkles, RefreshCw, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Lock, Phone, Mail, User, Store, ShieldCheck, ArrowRight, KeyRound, Sparkles, RefreshCw, CheckCircle2, ArrowLeft, UserPlus } from "lucide-react";
 
 export const LoginView = () => {
   const { login, register, forgotPassword, resetPassword, loginAsDemo, authError, isLoading, setAuthError } = useAuth();
@@ -167,8 +167,26 @@ export const LoginView = () => {
 
           {/* Error Alert Box */}
           {authError && (
-            <div className="bg-rose-500/20 border border-rose-500/40 text-rose-300 p-3 rounded-2xl text-xs font-semibold text-center">
-              {authError}
+            <div className="bg-rose-500/20 border border-rose-500/40 text-rose-300 p-3.5 rounded-2xl text-xs font-semibold space-y-2 text-center">
+              <p>{authError}</p>
+              {mode === "login" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (identifier.includes("@")) {
+                      setEmail(identifier);
+                    } else if (identifier.trim()) {
+                      setPhone(identifier);
+                    }
+                    setMode("register");
+                    setAuthError("");
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer"
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Create This Account Now</span>
+                </button>
+              )}
             </div>
           )}
 

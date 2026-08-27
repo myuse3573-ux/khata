@@ -5,6 +5,9 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
+  define: {
+    'process.env': {}
+  },
   plugins: [react(), tailwindcss()],
   server: {
     host: true, // Expose server to local Wi-Fi network (Android phones on same Wi-Fi)

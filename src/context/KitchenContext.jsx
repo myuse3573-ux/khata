@@ -12,6 +12,7 @@ import { KitchenContext } from "./kitchenContextValue";
 import { getApiBaseUrl } from "../config/api";
 
 const API_BASE = getApiBaseUrl();
+const isLocalSessionToken = (value) => value?.startsWith("token_demo_") || value?.startsWith("token_local_");
 
 export const KitchenProvider = ({ children }) => {
   const { user, token, isAuthenticated, logout } = useAuth();
@@ -76,7 +77,7 @@ export const KitchenProvider = ({ children }) => {
 
   // ── Load user's groups on login ───────────────────────────────────────────
   useEffect(() => {
-    if (!isAuthenticated || !token || !user?.id) return;
+    if (!isAuthenticated || !token || !user?.id || isLocalSessionToken(token)) return;
 
     const loadGroups = async () => {
       try {

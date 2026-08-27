@@ -5,9 +5,10 @@ import { exportBackupData, downloadAsJson, parseImportData } from "../../utils/s
 import {
   Store, Globe, Download, Upload, Shield,
   Smartphone, Lock, User, LogOut, KeyRound, Eye, EyeOff,
-  ChefHat
+  ChefHat, Flame
 } from "lucide-react";
 import { KitchenGroupScreen } from "../kitchen/KitchenGroupScreen";
+import { FirebaseSettings } from "./FirebaseSettings";
 
 export const SettingsView = () => {
   const { business, updateBusinessProfile, settings, setLang, updateSettings, importBackupData,
@@ -91,6 +92,7 @@ export const SettingsView = () => {
 
   const sections = [
     { id: "profile", label: "Business", icon: Store },
+    { id: "firebase", label: "Firebase Cloud", icon: Flame },
     { id: "kitchen", label: "Kitchen", icon: ChefHat },
     { id: "lang", label: "Language", icon: Globe },
     { id: "backup", label: "Backup", icon: Shield },
@@ -171,6 +173,9 @@ export const SettingsView = () => {
             </form>
           </div>
         )}
+
+        {/* ── Firebase Cloud ────────────────────────────────────────── */}
+        {activeSection === "firebase" && <FirebaseSettings />}
 
         {/* ── Kitchen Group ──────────────────────────────────────────── */}
         {activeSection === "kitchen" && <KitchenGroupScreen />}

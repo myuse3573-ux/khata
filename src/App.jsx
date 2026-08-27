@@ -114,10 +114,12 @@ function MainContent() {
       </main>
 
       {/* Bottom Navigation */}
-      <BottomNav
-        activeTab={activeSelectedCustomer ? "customers" : activeTab}
-        setActiveTab={tab => { setSelectedCustomer(null); setActiveTab(tab); }}
-      />
+      {!activeSelectedCustomer && (
+        <BottomNav
+          activeTab={activeTab}
+          setActiveTab={tab => { setSelectedCustomer(null); setActiveTab(tab); }}
+        />
+      )}
 
       {/* Modals */}
       <AddCustomerModal
