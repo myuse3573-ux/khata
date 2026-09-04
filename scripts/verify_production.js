@@ -99,7 +99,7 @@ async function verifyProductionSystem() {
     );
 
     // Attempt second push of same operation ID
-    const duplicateRes = await client.query(
+    await client.query(
       `INSERT INTO sync_operations (operation_id, device_id, user_id, entity_type, entity_id, operation_type, payload, status)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        ON CONFLICT (operation_id) DO NOTHING`,

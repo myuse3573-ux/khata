@@ -20,7 +20,7 @@ async function createUser() {
   try {
     await mongoose.connect(TARGET_URI, { serverSelectionTimeoutMS: 5000 });
   } catch (err) {
-    console.error("❌ Cannot connect to MongoDB!");
+    console.error("❌ Cannot connect to MongoDB!", err);
     console.error("   Make sure MongoDB is running with auth DISABLED.");
     console.error("   Run Setup-MongoDB.bat as Administrator to do this automatically.");
     process.exit(1);

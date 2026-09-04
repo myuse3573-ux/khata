@@ -379,6 +379,7 @@ app.get("/api/auth/me", authenticateToken, async (req, res) => {
     if (!user) return res.status(404).json({ error: "User not found." });
     res.json({ status: "success", user: safeUser(user) });
   } catch (err) {
+    console.error("Fetch user error:", err);
     res.status(500).json({ error: "Failed to fetch user." });
   }
 });
@@ -402,6 +403,7 @@ app.post("/api/auth/change-password", authenticateToken, async (req, res) => {
     await User.updateOne({ _id: req.userId }, { password_hash: newHash });
     res.json({ status: "success", message: "Password updated successfully." });
   } catch (err) {
+    console.error("Password change error:", err);
     res.status(500).json({ error: "Password change failed." });
   }
 });
@@ -426,6 +428,7 @@ app.get("/api/personal", authenticateToken, async (req, res) => {
       }
     });
   } catch (err) {
+    console.error("Fetch personal data error:", err);
     res.status(500).json({ error: "Failed to fetch data." });
   }
 });
@@ -604,6 +607,7 @@ app.get("/api/kitchen/my-groups", authenticateToken, async (req, res) => {
       groups: groups.filter(Boolean)
     });
   } catch (err) {
+    console.error("Fetch groups error:", err);
     res.status(500).json({ error: "Failed to fetch groups." });
   }
 });
@@ -739,6 +743,7 @@ app.post("/api/kitchen/:groupId/member/toggle-pause", authenticateToken, require
 
     res.json({ status: "success", message: status === "paused" ? "Member paused ⏸️" : "Member resumed ▶️" });
   } catch (err) {
+    console.error("Update member status error:", err);
     res.status(500).json({ error: "Failed to update member status." });
   }
 });
@@ -780,6 +785,7 @@ app.post("/api/kitchen/:groupId/member/add-manual", authenticateToken, requireKi
 
     res.status(201).json({ status: "success", message: `Added "${cleanName}" to kitchen group!`, member: memberObj });
   } catch (err) {
+    console.error("Add manual member error:", err);
     res.status(500).json({ error: "Failed to add member." });
   }
 });
@@ -834,6 +840,7 @@ app.post("/api/kitchen/:groupId/member/delete", authenticateToken, requireKitche
 
     res.json({ status: "success", message: "Member removed from kitchen group." });
   } catch (err) {
+    console.error("Remove member error:", err);
     res.status(500).json({ error: "Failed to remove member." });
   }
 });
@@ -872,6 +879,7 @@ app.post("/api/kitchen/:groupId/leave", authenticateToken, requireKitchenMember(
 
     res.json({ status: "success", message: "You have left the kitchen group." });
   } catch (err) {
+    console.error("Leave kitchen group error:", err);
     res.status(500).json({ error: "Failed to leave kitchen group." });
   }
 });
@@ -893,6 +901,7 @@ app.post("/api/kitchen/:groupId/promote", authenticateToken, requireKitchenMembe
 
     res.json({ status: "success", message: `Member role updated to ${role}.` });
   } catch (err) {
+    console.error("Update member role error:", err);
     res.status(500).json({ error: "Failed to update role." });
   }
 });
@@ -922,6 +931,7 @@ app.get("/api/kitchen/:groupId/invite", authenticateToken, requireKitchenMember(
       whatsappText: `Join my kitchen group "${group.name}" on Digital Khata!\n\nJoin Code: ${group.join_code}\n\nOr open the app and enter this code in Kitchen → Join Group.`
     });
   } catch (err) {
+    console.error("Generate invite error:", err);
     res.status(500).json({ error: "Failed to generate invite." });
   }
 });
