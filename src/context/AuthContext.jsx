@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { AuthContext } from "./authContextValue";
 import { getApiBaseUrl } from "../config/api";
 import { firestoreService } from "../services/firestoreService";
-import { isFirebaseConfigured } from "../config/firebase";
+import { auth, isFirebaseConfigured } from "../config/firebase";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const API_BASE = getApiBaseUrl();
 const isLocalSessionToken = (value) => value?.startsWith("token_");
@@ -25,14 +26,9 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      // Local/demo sessions are intentionally not sent to the API.
+      // Old client-only sessions are not valid credentials for protected data.
       if (isLocalSessionToken(savedToken)) {
-        try {
-          setToken(savedToken);
-          setUser(JSON.parse(savedUser));
-        } catch {
-          clearLocalSession();
-        }
+        clearLocalSession();
         setIsLoading(false);
         return;
       }
@@ -48,24 +44,10 @@ export const AuthProvider = ({ children }) => {
           setToken(savedToken);
           setUser(data.user);
         } else {
-          // Restore from cached user seamlessly
-          try {
-            const cached = JSON.parse(savedUser);
-            setToken(savedToken);
-            setUser(cached);
-          } catch {
-            clearLocalSession();
-          }
-        }
-      } catch {
-        // Server offline — restore from local cache seamlessly
-        try {
-          const cachedUser = JSON.parse(savedUser);
-          setToken(savedToken);
-          setUser(cachedUser);
-        } catch {
           clearLocalSession();
         }
+      } catch {
+        clearLocalSession();
       }
 
       setIsLoading(false);
@@ -86,6 +68,16 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("khata_user", JSON.stringify(usr));
     setToken(tok);
     setUser(usr);
+    if (isFirebaseConfigured() && usr?.id) {
+      firestoreService.setDocument("users", usr.id, {
+        id: usr.id,
+        name: usr.name || "",
+        phone: usr.phone || "",
+        email: usr.email || "",
+        shopName: usr.shopName || "",
+        lastLoginAt: new Date().toISOString()
+      }).catch((error) => console.warn("[Firebase] Profile sync failed:", error.message));
+    }
   };
 
   // ── Login ────────────────────────────────────────────────────────────────
@@ -96,42 +88,8 @@ export const AuthProvider = ({ children }) => {
     const cleanIdentifier = identifier.trim();
     const cleanPassword = password.trim();
 
-    // 1. Firestore Cloud Database Lookup (primary backend — Firebase)
-    if (isFirebaseConfigured()) {
-      try {
-        // Look up user by phone or email in Firestore
-        const allUsers = await firestoreService.getCollection("users");
-        const found = allUsers.find(
-          (u) => u.phone === cleanIdentifier || u.email?.toLowerCase() === cleanIdentifier.toLowerCase()
-        );
-
-        if (found) {
-          const sessionToken = "token_fs_" + found.id + "_" + Date.now();
-          saveSession(sessionToken, found);
-          setIsLocked(false);
-          setIsLoading(false);
-          return { success: true };
-        }
-      } catch (err) {
-        console.warn("[Firebase] Firestore login lookup error:", err.message);
-      }
-    }
-
-    // 2. Local offline cache fallback
-    const savedUserStr = localStorage.getItem("khata_user");
-    if (savedUserStr) {
-      try {
-        const savedUser = JSON.parse(savedUserStr);
-        if (savedUser && (savedUser.phone === cleanIdentifier || savedUser.email === cleanIdentifier)) {
-          saveSession("token_local_" + Date.now(), savedUser);
-          setIsLocked(false);
-          setIsLoading(false);
-          return { success: true, isOffline: true };
-        }
-      } catch { /* parse error */ }
-    }
-
-    // 3. Legacy MongoDB server fallback (only if still in use)
+    // The API is the source of truth for credentials and sessions. Firestore
+    // is used for optional data sync, never for password authentication.
     try {
       const res = await fetch(`${API_BASE}/auth/login`, {
         method: "POST",
@@ -148,10 +106,10 @@ export const AuthProvider = ({ children }) => {
         return { success: true };
       }
     } catch {
-      // Backend server unavailable — proceed to error
+      // Backend server unavailable — do not create a fake authenticated session.
     }
 
-    const errorMsg = "No account found matching this phone or email. Please check your credentials or register a New Account.";
+    const errorMsg = "Unable to sign in. Please check your credentials and database connection.";
     setAuthError(errorMsg);
     setIsLoading(false);
     return { success: false, error: errorMsg };
@@ -162,38 +120,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     setAuthError("");
 
-    const userId = "usr_" + (phone || email?.replace(/[^a-zA-Z0-9]/g, "") || Date.now());
-    const newUser = {
-      id: userId,
-      name: name || "Khata User",
-      phone: phone || "",
-      email: email || "",
-      shopName: shopName || `${name || "User"}'s Khata`,
-      createdAt: new Date().toISOString()
-    };
-    const sessionToken = "token_" + Date.now();
-
-    // 1. Save to Cloud Firestore Database
-    if (isFirebaseConfigured()) {
-      try {
-        await firestoreService.setDocument("users", userId, newUser);
-        // Initialize user business profile in Firestore
-        await firestoreService.setDocument(`users/${userId}/profile`, "business", {
-          id: `b_${userId}`,
-          name: newUser.shopName,
-          owner: newUser.name,
-          phone: newUser.phone,
-          address: "",
-          upiId: "",
-          gstin: "",
-          createdDate: new Date().toISOString()
-        });
-      } catch (err) {
-        console.warn("[Firebase] Error creating user in Firestore:", err.message);
-      }
-    }
-
-    // 2. Try server registration if online
+    // Register against the same API/database used by all protected features.
     try {
       const res = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
@@ -208,14 +135,41 @@ export const AuthProvider = ({ children }) => {
         return { success: true };
       }
     } catch {
-      // Backend offline — proceed with Firestore / Local user
+      // Backend unavailable; never create a client-only account.
     }
 
-    // Save session locally and complete login
-    saveSession(sessionToken, newUser);
-    setIsLocked(false);
+    const errorMsg = "Server unavailable. Your account was not created. Please try again when the database server is online.";
+    setAuthError(errorMsg);
     setIsLoading(false);
-    return { success: true };
+    return { success: false, error: errorMsg };
+  };
+
+  const loginWithGoogle = async () => {
+    setIsLoading(true);
+    setAuthError("");
+    try {
+      if (!isFirebaseConfigured() || !auth) {
+        throw new Error("Google sign-in is not configured. Add the Firebase web credentials first.");
+      }
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+      const idToken = await result.user.getIdToken();
+      const res = await fetch(`${API_BASE}/auth/google`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken })
+      });
+      const data = await res.json();
+      if (!res.ok || data.status !== "success") throw new Error(data.error || "Google sign-in failed.");
+      saveSession(data.token, data.user);
+      setIsLocked(false);
+      return { success: true };
+    } catch (error) {
+      const message = error.message || "Google sign-in failed.";
+      setAuthError(message);
+      return { success: false, error: message };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // ── Forgot Password (Request OTP) ─────────────────────────────────────────
@@ -338,18 +292,20 @@ export const AuthProvider = ({ children }) => {
   const loginAsDemo = async () => {
     setIsLoading(true);
     setAuthError("");
-    const demoUser = {
-      id: "usr_demo_admin",
-      name: "Rajesh Sharma",
-      phone: "9876543210",
-      email: "demo@khata.app",
-      shopName: "Sharma General Store",
-      createdAt: new Date().toISOString()
-    };
-    saveSession("token_demo_" + Date.now(), demoUser);
-    setIsLocked(false);
-    setIsLoading(false);
-    return { success: true };
+    try {
+      const res = await fetch(`${API_BASE}/auth/demo`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok || data.status !== "success") throw new Error(data.error || "Demo login failed.");
+      saveSession(data.token, data.user);
+      setIsLocked(false);
+      return { success: true };
+    } catch (error) {
+      const message = error.message || "Demo login failed.";
+      setAuthError(message);
+      return { success: false, error: message };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -362,6 +318,7 @@ export const AuthProvider = ({ children }) => {
         authError,
         isLoading,
         login,
+        loginWithGoogle,
         register,
         forgotPassword,
         resetPassword,

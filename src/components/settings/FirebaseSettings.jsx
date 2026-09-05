@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { isFirebaseConfigured, firebaseConfig } from "../../config/firebase";
+import { isFirebaseConfigured } from "../../config/firebase";
 import { firestoreService } from "../../services/firestoreService";
 import { usePersonal } from "../../context/usePersonal";
 import { useAuth } from "../../context/useAuth";
@@ -49,7 +49,7 @@ export const FirebaseSettings = () => {
       if (readBack) {
         setTestResult({
           success: true,
-          message: `Successfully connected to Cloud Firestore (Project: ${firebaseConfig.projectId})`
+          message: "Successfully connected to Cloud Firestore."
         });
         showToast("Firestore connection verified! 🔥");
       } else {
@@ -161,28 +161,20 @@ VITE_FIREBASE_APP_ID=1:123456789:web:...`;
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
-            <span className="text-xs font-medium text-slate-400 uppercase">Project ID</span>
-            <p className="font-mono text-slate-800 font-medium truncate mt-0.5">
-              {firebaseConfig.projectId || "(not set in .env)"}
-            </p>
+            <span className="text-xs font-medium text-slate-400 uppercase">Firestore</span>
+            <p className="font-medium text-slate-800 mt-0.5">{configured ? "Configured" : "Not configured"}</p>
           </div>
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
-            <span className="text-xs font-medium text-slate-400 uppercase">Auth Domain</span>
-            <p className="font-mono text-slate-800 font-medium truncate mt-0.5">
-              {firebaseConfig.authDomain || "(not set in .env)"}
-            </p>
+            <span className="text-xs font-medium text-slate-400 uppercase">Google Sign-In</span>
+            <p className="font-medium text-slate-800 mt-0.5">{configured ? "Available" : "Needs setup"}</p>
           </div>
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
-            <span className="text-xs font-medium text-slate-400 uppercase">API Key</span>
-            <p className="font-mono text-slate-800 font-medium truncate mt-0.5">
-              {firebaseConfig.apiKey ? `${firebaseConfig.apiKey.substring(0, 8)}••••••••` : "(not set in .env)"}
-            </p>
+            <span className="text-xs font-medium text-slate-400 uppercase">Credentials</span>
+            <p className="font-medium text-slate-800 mt-0.5">Hidden for security</p>
           </div>
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
-            <span className="text-xs font-medium text-slate-400 uppercase">Storage Bucket</span>
-            <p className="font-mono text-slate-800 font-medium truncate mt-0.5">
-              {firebaseConfig.storageBucket || "(not set in .env)"}
-            </p>
+            <span className="text-xs font-medium text-slate-400 uppercase">Database Identifier</span>
+            <p className="font-medium text-slate-800 mt-0.5">Hidden for security</p>
           </div>
         </div>
 

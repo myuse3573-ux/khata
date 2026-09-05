@@ -26,4 +26,8 @@ export async function connectMongoDB() {
   });
 }
 
+export function isMongoDBReady() {
+  return mongoose.connection.readyState === 1;
+}
+
 export default connectMongoDB;

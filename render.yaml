@@ -9,7 +9,9 @@ services:
         value: 5000
       - key: NODE_ENV
         value: production
-      - key: DATABASE_URL
-        value: postgresql://neondb_owner:npg_n3uCa2lXqIRb@ep-plain-truth-awv6z84e.c-12.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - key: MONGODB_URI
+        sync: false
       - key: JWT_SECRET
         generateValue: true
+      - key: FIREBASE_WEB_API_KEY
+        sync: false

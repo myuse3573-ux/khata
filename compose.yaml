@@ -1,4 +1,14 @@
 services:
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: khata_admin
+      MONGO_INITDB_ROOT_PASSWORD: khata2026
+      MONGO_INITDB_DATABASE: khata_db
+    volumes:
+      - mongo_data:/data/db
+
   khata:
     image: khata
     build:
@@ -6,5 +16,13 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
+      PORT: 5000
+      MONGODB_URI: mongodb://khata_admin:khata2026@mongo:27017/khata_db?authSource=admin
+      JWT_SECRET: change-this-in-production
+    depends_on:
+      - mongo
     ports:
-      - 3000:3000
+      - 5000:5000
+
+volumes:
+  mongo_data:

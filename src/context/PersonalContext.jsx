@@ -100,6 +100,38 @@ export const PersonalProvider = ({ children }) => {
         return;
       }
 
+      // Firestore is the website cloud source. MongoDB remains a fallback for
+      // older accounts and for temporary Firestore outages.
+      if (isFirebaseConfigured()) {
+        try {
+          const cloud = await firestoreService.getDocument(`users/${userId}/data`, "snapshot");
+          if (cloud && (cloud.business || cloud.books || cloud.customers || cloud.transactions || cloud.cashbook || cloud.settings)) {
+            const biz = cloud.business || emptyBusiness(user);
+            const bks = cloud.books?.length > 0
+              ? cloud.books
+              : [{ id: `book_${userId}_1`, name: "Main Khata", isDefault: true }];
+            setBusiness(biz);
+            setBooks(bks);
+            setActiveBookId(bks[0]?.id || "");
+            setCustomers(cloud.customers || []);
+            setTransactions(cloud.transactions || []);
+            setCashbook(cloud.cashbook || []);
+            setSettings(cloud.settings || { lang: "en", pin: "", theme: "light" });
+            saveLocal(userId, "business", biz);
+            saveLocal(userId, "books", bks);
+            saveLocal(userId, "customers", cloud.customers || []);
+            saveLocal(userId, "transactions", cloud.transactions || []);
+            saveLocal(userId, "cashbook", cloud.cashbook || []);
+            saveLocal(userId, "settings", cloud.settings || { lang: "en", pin: "", theme: "light" });
+            setSyncStatus("synced");
+            setIsLoading(false);
+            return;
+          }
+        } catch (error) {
+          console.warn("[Firebase] Could not load cloud snapshot:", error.message);
+        }
+      }
+
       // Try fetching from server first
       try {
         const res = await fetch(`${API_BASE}/personal`, {
@@ -136,6 +168,18 @@ export const PersonalProvider = ({ children }) => {
             saveLocal(userId, "transactions", db.transactions || []);
             saveLocal(userId, "cashbook", db.cashbook || []);
             saveLocal(userId, "settings", db.settings || { lang: "en", pin: "", theme: "light" });
+            if (isFirebaseConfigured()) {
+              firestoreService.setDocument(`users/${userId}/data`, "snapshot", {
+                userId,
+                business: biz,
+                books: bks,
+                customers: db.customers || [],
+                transactions: db.transactions || [],
+                cashbook: db.cashbook || [],
+                settings: db.settings || { lang: "en", pin: "", theme: "light" },
+                syncedAt: new Date().toISOString()
+              }).catch((error) => console.warn("[Firebase] Initial data migration failed:", error.message));
+            }
             setSyncStatus("synced");
           }
         } else {
@@ -184,12 +228,22 @@ export const PersonalProvider = ({ children }) => {
         } else if (Array.isArray(value)) {
           await firestoreService.syncBatch(`users/${userId}/${field}`, value);
         }
+        await firestoreService.setDocument(`users/${userId}/data`, "snapshot", {
+          userId,
+          business: field === "business" ? value : business,
+          books: field === "books" ? value : books,
+          customers: field === "customers" ? value : customers,
+          transactions: field === "transactions" ? value : transactions,
+          cashbook: field === "cashbook" ? value : cashbook,
+          settings: field === "settings" ? value : settings,
+          syncedAt: new Date().toISOString()
+        });
         setSyncStatus("synced");
       } catch (err) {
         console.warn(`[Firebase] Firestore sync for ${field}:`, err.message);
       }
     }
-  }, [userId, token, logout]);
+  }, [userId, token, logout, business, books, customers, transactions, cashbook, settings]);
 
   // ── Business ────────────────────────────────────────────────────────────
   const updateBusinessProfile = (updated) => {
@@ -371,6 +425,19 @@ export const PersonalProvider = ({ children }) => {
           cashbook: nextCashbook,
           settings: nextSettings
         })
+      }).catch(() => {});
+    }
+
+    if (isFirebaseConfigured()) {
+      firestoreService.setDocument(`users/${userId}/data`, "snapshot", {
+        userId,
+        business: nextBusiness,
+        books: nextBooks,
+        customers: nextCustomers,
+        transactions: nextTransactions,
+        cashbook: nextCashbook,
+        settings: nextSettings,
+        syncedAt: new Date().toISOString()
       }).catch(() => {});
     }
   };

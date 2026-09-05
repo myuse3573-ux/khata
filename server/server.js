@@ -12,7 +12,7 @@ import express from "express";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import rateLimit from "express-rate-limit";
-import { connectMongoDB } from "./mongodb.js";
+import { connectMongoDB, isMongoDBReady } from "./mongodb.js";
 import { generateToken, authenticateToken, requireKitchenMember } from "./auth.js";
 import { generateId, generateJoinCode } from "./utils.js";
 
@@ -27,6 +27,7 @@ import { PasswordReset } from "./models/PasswordReset.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const FIREBASE_WEB_API_KEY = process.env.FIREBASE_WEB_API_KEY || process.env.VITE_FIREBASE_API_KEY;
 
 // ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors({ origin: true, credentials: true }));
@@ -56,7 +57,7 @@ app.get(["/", "/api", "/api/health"], (req, res) => {
     name: "Khata Production API Backend Server",
     status: "online",
     version: "4.0.0",
-    database: "mongodb",
+    database: isMongoDBReady() ? "mongodb" : "mongodb-unavailable",
     timestamp: new Date().toISOString(),
     endpoints: {
       health: "/api/health",
@@ -88,6 +89,31 @@ function safeUser(user) {
     email: user.email || "",
     shopName: user.shop_name
   };
+}
+
+async function ensureUserData(user) {
+  const existing = await UserData.findById(user._id);
+  if (existing) return;
+
+  await UserData.create({
+    _id: user._id,
+    business: {
+      id: `b_${user._id}`,
+      name: user.shop_name,
+      owner: user.name,
+      phone: user.phone || "",
+      email: user.email || "",
+      address: "",
+      upiId: "",
+      gstin: "",
+      createdDate: new Date().toISOString()
+    },
+    books: [{ id: `book_${user._id}_1`, name: "Main Khata", isDefault: true }],
+    customers: [],
+    transactions: [],
+    cashbook: [],
+    settings: { lang: "en", pin: "", theme: "light" }
+  });
 }
 
 function validateStr(val, name, maxLen = 200) {
@@ -269,6 +295,72 @@ app.post("/api/auth/login", async (req, res) => {
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ error: "Login failed. Please try again." });
+  }
+});
+
+/** POST /api/auth/google — exchange a Firebase Google ID token for a Khata JWT */
+app.post("/api/auth/google", async (req, res) => {
+  try {
+    const { idToken } = req.body;
+    if (!idToken || !FIREBASE_WEB_API_KEY) {
+      return res.status(400).json({ error: "Google sign-in is not configured on the server." });
+    }
+
+    const verifyResponse = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(FIREBASE_WEB_API_KEY)}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken })
+      }
+    );
+    const identity = await verifyResponse.json();
+    const firebaseUser = identity.users?.[0];
+    if (!verifyResponse.ok || !firebaseUser?.localId || !firebaseUser.email) {
+      return res.status(401).json({ error: "Google identity could not be verified." });
+    }
+
+    const email = firebaseUser.email.trim().toLowerCase();
+    let user = await User.findOne({ email });
+    if (!user) {
+      const name = firebaseUser.displayName?.trim() || email.split("@")[0];
+      user = await User.create({
+        _id: generateId("usr"),
+        email,
+        phone: null,
+        password_hash: `GOOGLE:${firebaseUser.localId}`,
+        name,
+        shop_name: `${name}'s Khata`
+      });
+    }
+
+    await ensureUserData(user);
+    res.json({ status: "success", message: "Google sign-in successful!", token: generateToken(user._id), user: safeUser(user) });
+  } catch (err) {
+    console.error("Google sign-in error:", err);
+    res.status(500).json({ error: "Google sign-in failed. Please try again." });
+  }
+});
+
+/** POST /api/auth/demo — development/demo account with a real server session */
+app.post("/api/auth/demo", async (_req, res) => {
+  try {
+    let user = await User.findOne({ email: "demo@khata.app" });
+    if (!user) {
+      user = await User.create({
+        _id: "usr_demo_admin",
+        email: "demo@khata.app",
+        phone: "9876543210",
+        password_hash: await bcrypt.hash("demo-only", 12),
+        name: "Rajesh Sharma",
+        shop_name: "Sharma General Store"
+      });
+    }
+    await ensureUserData(user);
+    res.json({ status: "success", token: generateToken(user._id), user: safeUser(user) });
+  } catch (err) {
+    console.error("Demo login error:", err);
+    res.status(500).json({ error: "Demo login failed. Please check the database connection." });
   }
 });
 
@@ -977,7 +1069,7 @@ connectMongoDB().then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Khata API Server running at http://localhost:${PORT}`);
     console.log(`🔐 Authentication: JWT + bcrypt`);
-    console.log(`💾 Database: MongoDB (${process.env.MONGODB_URI || "mongodb://localhost:27017/khata_db"})`);
+    console.log("💾 Database: MongoDB (connection details hidden)");
     console.log(`📡 Real-time: Server-Sent Events`);
   });
 });

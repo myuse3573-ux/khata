@@ -10,6 +10,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "./useAuth";
 import { KitchenContext } from "./kitchenContextValue";
 import { getApiBaseUrl } from "../config/api";
+import { firestoreService } from "../services/firestoreService";
+import { isFirebaseConfigured } from "../config/firebase";
 
 const API_BASE = getApiBaseUrl();
 const isLocalSessionToken = (value) => value?.startsWith("token_");
@@ -43,6 +45,20 @@ export const KitchenProvider = ({ children }) => {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`
   }), [token]);
+
+  const syncKitchenToFirebase = useCallback(async (groupId, data) => {
+    if (!groupId || !isFirebaseConfigured()) return;
+    try {
+      await firestoreService.setDocument(`kitchenGroups/${groupId}`, "state", {
+        groupId,
+        updatedBy: user?.id || "",
+        updatedAt: new Date().toISOString(),
+        ...data
+      });
+    } catch (error) {
+      console.warn("[Firebase] Kitchen sync failed:", error.message);
+    }
+  }, [user?.id]);
 
   // ── Clear all kitchen state ───────────────────────────────────────────────
   const clearKitchenState = useCallback(() => {
@@ -240,6 +256,12 @@ export const KitchenProvider = ({ children }) => {
       if (res.ok && data.status === "success") {
         const newGroup = { ...data.group, memberCount: 1 };
         setMyGroups(prev => [newGroup, ...prev]);
+        await syncKitchenToFirebase(newGroup.id, {
+          group: newGroup,
+          members: [{ id: `${newGroup.id}_${user.id}`, userId: user.id, name: user.name, role: "OWNER", status: "active" }],
+          roster: [],
+          cashbook: []
+        });
         await activateGroup(newGroup);
         showToast(`🎉 Kitchen group "${name}" created! Share code: ${data.group.joinCode}`);
         return data.group;
@@ -272,6 +294,10 @@ export const KitchenProvider = ({ children }) => {
         setMyGroups(prev => {
           const exists = prev.find(g => g.id === joinedGroup.id);
           return exists ? prev : [joinedGroup, ...prev];
+        });
+        await syncKitchenToFirebase(joinedGroup.id, {
+          group: joinedGroup,
+          memberJoined: { userId: user.id, name: user.name, role: "MEMBER", status: "active" }
         });
         await activateGroup(joinedGroup);
         showToast(`✅ Joined "${data.group.name}" successfully!`);
@@ -331,6 +357,12 @@ export const KitchenProvider = ({ children }) => {
         headers: authHeaders(),
         body: JSON.stringify(payload)
       });
+      await syncKitchenToFirebase(activeGroup.id, {
+        group: activeGroup,
+        members,
+        roster: newRoster !== undefined ? newRoster : roster,
+        cashbook: newCashbook !== undefined ? newCashbook : kitchenCashbook
+      });
       if (res.status === 401) {
         if (isLocalSessionToken(token)) return;
         logout(); return;
@@ -340,7 +372,7 @@ export const KitchenProvider = ({ children }) => {
     } catch {
       setKitchenSyncStatus("failed");
     }
-  }, [activeGroup?.id, token, authHeaders, logout]);
+  }, [activeGroup, token, authHeaders, logout, syncKitchenToFirebase, members, roster, kitchenCashbook]);
 
   // ── Toggle member pause ───────────────────────────────────────────────────
   const toggleMemberPause = async (memberId) => {
@@ -391,6 +423,12 @@ export const KitchenProvider = ({ children }) => {
               }
             : m
         ));
+          await syncKitchenToFirebase(activeGroup.id, {
+            group: activeGroup,
+            members: members.map(m => (m.id === member.id || m.id === memberId) ? { ...m, status: newStatus } : m),
+            roster,
+            cashbook: kitchenCashbook
+          });
       }
     } catch {
       setMembers(prev => prev.map(m => (m.id === member.id || m.id === memberId) ? { ...m, status: member.status } : m));
@@ -548,6 +586,12 @@ export const KitchenProvider = ({ children }) => {
       }
       if (res.ok && data.member) {
         setMembers(prev => [...prev, data.member]);
+        await syncKitchenToFirebase(activeGroup.id, {
+          group: activeGroup,
+          members: [...members, data.member],
+          roster,
+          cashbook: kitchenCashbook
+        });
         showToast(`Added "${name}" to kitchen group!`);
         return data.member;
       } else {
@@ -581,6 +625,12 @@ export const KitchenProvider = ({ children }) => {
           ...item,
           memberIds: (item.memberIds || []).filter(mId => mId !== memberId && mId !== data.userId)
         })));
+        await syncKitchenToFirebase(activeGroup.id, {
+          group: activeGroup,
+          members: members.filter(m => m.id !== memberId && m.userId !== memberId),
+          roster,
+          cashbook: kitchenCashbook
+        });
         showToast("Member removed from kitchen group.", "error");
         return true;
       } else {

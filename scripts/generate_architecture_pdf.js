@@ -1,0 +1,992 @@
+import fs from "fs";
+import path from "path";
+import { execSync } from "child_process";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname, "..");
+
+const htmlPath = path.join(rootDir, "Khata_App_Architecture_Guide.html");
+const pdfPath = path.join(rootDir, "Khata_App_Complete_Architecture_and_Engineering_Guide.pdf");
+
+console.log("Generating Khata App Architecture & Engineering Guide HTML...");
+
+const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Khata App — Architecture, Engineering & Implementation Guide</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 14mm 18mm 14mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      line-height: 1.55;
+      font-size: 13px;
+    }
+
+    .page {
+      page-break-after: always;
+      position: relative;
+    }
+
+    .page:last-child {
+      page-break-after: avoid;
+    }
+
+    /* Cover Page */
+    .cover {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 20px;
+      page-break-after: always;
+      background: linear-gradient(145deg, #064e3b 0%, #0f172a 70%, #022c22 100%);
+      color: #ffffff;
+      border-radius: 12px;
+    }
+
+    .cover-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cover-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 2px solid #10b981;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .cover-tag {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #34d399;
+      font-weight: 700;
+    }
+
+    .cover-title-box {
+      margin-top: 60px;
+    }
+
+    .cover-title {
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .cover-subtitle {
+      font-size: 18px;
+      color: #94a3b8;
+      font-weight: 400;
+      max-width: 600px;
+      line-height: 1.4;
+    }
+
+    .cover-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-primary { background: #059669; color: #ffffff; }
+    .badge-outline { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; }
+
+    .cover-meta {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      font-size: 12px;
+    }
+
+    .meta-item-label {
+      color: #64748b;
+      text-transform: uppercase;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .meta-item-value {
+      color: #f1f5f9;
+      font-weight: 600;
+    }
+
+    /* Section Headings */
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 28px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #10b981;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #047857;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: #334155;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 12px;
+      color: #334155;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* Callouts / Highlights */
+    .callout {
+      background: #f0fdf4;
+      border-left: 4px solid #10b981;
+      padding: 12px 14px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+      font-size: 12px;
+      color: #065f46;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .callout-blue {
+      background: #eff6ff;
+      border-left-color: #3b82f6;
+      color: #1e40af;
+    }
+
+    .callout-amber {
+      background: #fffbeb;
+      border-left-color: #f59e0b;
+      color: #92400e;
+    }
+
+    /* Architecture Box Diagram */
+    .arch-diagram {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin: 16px 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+    }
+
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .arch-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .arch-card-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: #34d399;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 4px;
+    }
+
+    .arch-card ul {
+      margin-left: 14px;
+      font-size: 10.5px;
+      color: #cbd5e1;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 11.5px;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 7px 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* Code Blocks */
+    pre, code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      overflow-x: hidden;
+      margin: 10px 0;
+      line-height: 1.45;
+      border: 1px solid #1e293b;
+    }
+
+    code.inline {
+      background: #f1f5f9;
+      color: #0f766e;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 11px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Feature Grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .feature-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .feature-card h3 {
+      margin-top: 0;
+      color: #065f46;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feature-card p {
+      font-size: 11.5px;
+      margin-bottom: 0;
+    }
+
+    .tag {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .page-num {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 10px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== COVER PAGE ==================== -->
+  <div class="cover">
+    <div class="cover-top">
+      <div class="cover-icon">📙</div>
+      <div>
+        <div class="cover-tag">ENGINEERING & ARCHITECTURE SPECIFICATION</div>
+        <div style="font-size: 16px; font-weight: 700; color: #f8fafc;">Digital Khata & Collaborative Ledger Ecosystem</div>
+      </div>
+    </div>
+
+    <div class="cover-title-box">
+      <div class="cover-title">How The Khata App Was Built</div>
+      <div class="cover-subtitle">
+        A comprehensive technical breakdown of the full-stack architecture, double-entry bookkeeping engine, real-time shared kitchen synchronization, hybrid Android APK packaging, and cloud deployment pipelines.
+      </div>
+
+      <div class="cover-badges">
+        <span class="badge badge-primary">React 19</span>
+        <span class="badge badge-outline">Node.js 24 / Express 5</span>
+        <span class="badge badge-outline">MongoDB & Mongoose 9</span>
+        <span class="badge badge-outline">Capacitor 6 Android</span>
+        <span class="badge badge-outline">Tailwind CSS 4</span>
+        <span class="badge badge-outline">Vite 8</span>
+        <span class="badge badge-outline">Server-Sent Events (SSE)</span>
+        <span class="badge badge-outline">PWA Offline Engine</span>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div class="meta-item-label">SYSTEM VERSION</div>
+        <div class="meta-item-value">v4.0.0 Production Edition</div>
+      </div>
+      <div>
+        <div class="meta-item-label">PLATFORMS</div>
+        <div class="meta-item-value">Web (PWA) + Android APK + REST API</div>
+      </div>
+      <div>
+        <div class="meta-item-label">SECURITY SPEC</div>
+        <div class="meta-item-value">Bcrypt (Salt 12) + JWT + Strict RBAC</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 1: EXECUTIVE SUMMARY & ARCHITECTURE ==================== -->
+  <div class="page" style="padding-top: 10px;">
+    <h1>1. Executive Summary & Product Vision</h1>
+    <p>
+      <strong>Khata</strong> is a multi-platform, full-stack financial bookkeeping and shared community ledger application. It replaces error-prone paper ledgers (traditional <em>Bahi-Khata</em>) and chaotic flatmate spreadsheets with an intuitive, mobile-first digital experience.
+    </p>
+    <p>
+      The system solves two distinct financial workflows in a single cohesive platform:
+    </p>
+    <ul>
+      <li><strong>Personal & Business Ledger:</strong> Complete double-entry customer credit (<em>Udhar</em>) and payment (<em>Jama</em>) management, daily cashbook expense registers, automated WhatsApp reminder dispatch, and instant vector PDF financial statement generation.</li>
+      <li><strong>Collaborative Kitchen & Flatmate Ecosystem:</strong> Multi-user shared flat/hostel management featuring real-time Server-Sent Events (SSE), equal bill splitting with 1-click member ledger integration, and round-robin turn-tracker duty rosters (cooking, cleaning, groceries).</li>
+    </ul>
+
+    <div class="callout">
+      <div class="callout-title">Core Architectural Principle: Data Domain Isolation</div>
+      Khata enforces strict boundary separation between a user's <strong>Personal Ledger</strong> (private shop/individual transactions) and <strong>Shared Kitchen Groups</strong> (collaborative flatmate expenses). The two data domains are isolated in separate database collections, state contexts, and API endpoints, preventing any inadvertent data leakage.
+    </div>
+
+    <h1>2. High-Level System Architecture</h1>
+    <p>
+      Khata is built on a modern client-server topology designed for high availability, offline resilience, and cross-platform native execution:
+    </p>
+
+    <div class="arch-diagram">
+      <div style="text-align: center; font-weight: bold; color: #38bdf8; margin-bottom: 8px;">
+        KHATA HIGH-LEVEL SYSTEM TOPOLOGY
+      </div>
+      <div class="arch-grid">
+        <div class="arch-card">
+          <div class="arch-card-header">1. Client Layer</div>
+          <ul>
+            <li>React 19 + Tailwind CSS 4</li>
+            <li>Capacitor 6 Android Bridge</li>
+            <li>PWA Service Worker (Cache API)</li>
+            <li>User-Scoped LocalStorage Fallback</li>
+            <li>jsPDF Client-Side Vector Engine</li>
+          </ul>
+        </div>
+        <div class="arch-card">
+          <div class="arch-card-header">2. API & Real-time Layer</div>
+          <ul>
+            <li>Node.js 24 + Express 5</li>
+            <li>Stateless JWT Authentication</li>
+            <li>Bcrypt Password Hashing (Salt 12)</li>
+            <li>Dual-Tier Rate Limiters</li>
+            <li>Server-Sent Events (SSE) Hub</li>
+          </ul>
+        </div>
+        <div class="arch-card">
+          <div class="arch-card-header">3. Persistence & Cloud</div>
+          <ul>
+            <li>MongoDB via Mongoose 9</li>
+            <li>User & UserData Collections</li>
+            <li>KitchenGroup & Member Collections</li>
+            <li>Render / Docker Containerization</li>
+            <li>Firebase Hosting & Storage</li>
+          </ul>
+        </div>
+      </div>
+      <div style="font-size: 10px; color: #94a3b8; text-align: center;">
+        Data Flow: Client &harr; HTTPS REST (JWT) &harr; Express Gateway &harr; Mongoose ODM &harr; MongoDB Cluster
+      </div>
+    </div>
+
+    <h2>System Technology Stack Summary</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 20%;">Tier</th>
+          <th style="width: 30%;">Technologies</th>
+          <th style="width: 50%;">Engineering Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Frontend</strong></td>
+          <td>React 19, Vite 8, Tailwind CSS 4, Lucide React</td>
+          <td>High-performance UI rendering, zero-runtime CSS tokens, modular icon system, and instant HMR development.</td>
+        </tr>
+        <tr>
+          <td><strong>Mobile Native</strong></td>
+          <td>Capacitor 6, Android Gradle Plugin, Expo Camera</td>
+          <td>Wraps web assets into a native Android APK; integrates native hardware capabilities (Camera for QR, Haptics).</td>
+        </tr>
+        <tr>
+          <td><strong>Backend API</strong></td>
+          <td>Node.js 24, Express 5, CORS, Express-Rate-Limit</td>
+          <td>RESTful JSON services, secure token verification, route guards, and DDOS/brute-force rate limiting.</td>
+        </tr>
+        <tr>
+          <td><strong>Database</strong></td>
+          <td>MongoDB Atlas / Local MongoDB, Mongoose 9</td>
+          <td>Scalable document persistence, unique schema indexing, atomic document updates, and relational-style joins.</td>
+        </tr>
+        <tr>
+          <td><strong>Security</strong></td>
+          <td>bcryptjs, jsonwebtoken, PIN Lock Engine</td>
+          <td>Cryptographic password storage, tamper-proof session tokens, client-side financial privacy screen lock.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==================== PAGE 2: FOLDER STRUCTURE & DATABASE MODELING ==================== -->
+  <div class="page" style="padding-top: 10px;">
+    <h1>3. Codebase Structure & Directory Blueprint</h1>
+    <p>
+      The project is structured as a unified monorepo containing the web frontend, the backend API server, native Android container project files, and automated deployment scripts:
+    </p>
+
+    <pre>
+khata/
+├── android/                   # Native Android Studio project generated by Capacitor 6
+│   ├── app/src/main/          # AndroidManifest.xml, MainActivity.java, App Icons
+│   └── build.gradle           # Native Android Gradle build configurations
+├── server/                    # Node.js + Express 5 Production Backend
+│   ├── models/                # Mongoose Schema Definitions (User, UserData, Kitchen, etc.)
+│   ├── auth.js                # JWT issuance, token verification, and RBAC middleware
+│   ├── db.js & mongodb.js     # MongoDB connection management & legacy SQLite helpers
+│   ├── server.js              # Central Express server, API routes, and SSE streaming
+│   └── utils.js               # Nanoid generator, join code creators
+├── src/                       # React 19 Frontend Client
+│   ├── components/            # Modular UI Components
+│   │   ├── auth/              # LoginView, RegisterView, LockScreenModal
+│   │   ├── cashbook/          # CashbookView (Cash in / Cash out register)
+│   │   ├── customer/          # CustomerDetail, AddCustomerModal, AddTransactionModal
+│   │   ├── dashboard/         # DashboardView (Summary cards, customer list, quick actions)
+│   │   ├── kitchen/           # Kitchen group manager, roommate cards, join modal
+│   │   ├── layout/            # MobileHeader, BottomNav (Tab navigation)
+│   │   ├── qr/                # QRPayView (Dynamic UPI QR generator)
+│   │   ├── reports/           # ReportsView (PDF statement triggers, CSV download)
+│   │   ├── roster/            # TurnTrackerView (Round-robin item duty manager)
+│   │   ├── split/             # SplitExpenseModal (Bill splitting calculation & auto-log)
+│   │   └── ui/                # Toast notifications, OnlineStatusBanner
+│   ├── context/               # React Context Providers (AuthContext, PersonalContext, KitchenContext)
+│   ├── services/              # localDb, firestoreService, syncEngine, nativeStorage
+│   ├── utils/                 # pdfGenerator.js, formatters.js, translations.js, whatsapp.ts
+│   ├── App.jsx                # Application root, routing orchestration, modal controller
+│   └── index.css              # Global styles & Tailwind CSS v4 import
+├── Build-Android-APK.bat      # 1-Click batch build: Vite build -> Cap sync -> Gradle APK
+├── Start-Khata.bat            # 1-Click local launch: Concurrently runs server + Vite
+├── capacitor.config.json      # Capacitor Android native wrapper configuration
+└── package.json               # Root dependencies & build scripts
+    </pre>
+
+    <h1>4. Database Schema & Data Modeling (MongoDB)</h1>
+    <p>
+      Khata uses <strong>MongoDB via Mongoose 9</strong>. The database is organized into distinct collections to optimize querying speed and maintain clean separation of concerns:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Collection</th>
+          <th>Primary Keys & Indexes</th>
+          <th>Fields & Payload Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code class="inline">users</code></td>
+          <td><code class="inline">_id (usr_*)</code>, <code class="inline">phone (unique)</code>, <code class="inline">email (unique)</code></td>
+          <td>Core authentication entity. Stores name, phone, email, hashed password (<code class="inline">password_hash</code>), and primary shop name.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">user_data</code></td>
+          <td><code class="inline">_id (matches user._id)</code></td>
+          <td>Embedded document containing the user's business profile, multi-books, customer list, transaction ledgers, cashbook records, and preferences.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">kitchen_groups</code></td>
+          <td><code class="inline">_id (kg_*)</code>, <code class="inline">join_code (unique)</code></td>
+          <td>Shared kitchen/flatmate space. Stores group name, 6-character alphanumeric join code (e.g. <code class="inline">KHT-892</code>), owner ID, and max member limit.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">kitchen_members</code></td>
+          <td><code class="inline">_id (km_*)</code>, Compound: <code class="inline">(group_id, user_id)</code></td>
+          <td>Membership join record. Stores user ID reference (null for manual offline members), display name, role (<code class="inline">OWNER|ADMIN|MEMBER</code>), and status (<code class="inline">active|paused</code>).</td>
+        </tr>
+        <tr>
+          <td><code class="inline">kitchen_data</code></td>
+          <td><code class="inline">_id (matches group._id)</code></td>
+          <td>Shared community data: contains the roster duties array and the shared kitchen cashbook expenses array.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">password_resets</code></td>
+          <td><code class="inline">_id (pr_*)</code>, TTL index: <code class="inline">expires_at</code></td>
+          <td>Stores 6-digit one-time password (OTP) codes with a 15-minute expiration timestamp and usage flag.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==================== PAGE 3: BACKEND API & SECURITY ==================== -->
+  <div class="page" style="padding-top: 10px;">
+    <h1>5. Backend Architecture & API Security</h1>
+    <p>
+      The backend is powered by <strong>Express 5</strong> running on <strong>Node.js 24</strong>. It adheres to REST architectural standards, stateless JWT session verification, and proactive defense-in-depth principles.
+    </p>
+
+    <h2>5.1 Authentication & Password Security</h2>
+    <ul>
+      <li><strong>Bcrypt Password Hashing:</strong> Passwords are never stored in plain text. Every password is salted and hashed using <code class="inline">bcryptjs</code> with an industry-standard work factor of 12 rounds.</li>
+      <li><strong>Legacy Password Migration:</strong> The authentication middleware automatically detects older legacy password strings, verifies them securely, and silently upgrades them to bcrypt hashes upon successful authentication without interrupting the user.</li>
+      <li><strong>Stateless JWT Tokens:</strong> Upon authentication, an HMAC-SHA256 signed JSON Web Token is issued containing the user ID. Protected routes inspect the <code class="inline">Authorization: Bearer &lt;token&gt;</code> header.</li>
+    </ul>
+
+    <h2>5.2 Rate Limiting & Protection Against Abuse</h2>
+    <p>
+      To prevent brute-force attacks and credential stuffing, the server deploys two independent rate-limiting tiers via <code class="inline">express-rate-limit</code>:
+    </p>
+    <ul>
+      <li><code class="inline">authLimiter</code>: Restricts registration, login, and password reset endpoints to a maximum of <strong>15 requests per 15-minute window</strong> per IP address.</li>
+      <li><code class="inline">generalLimiter</code>: Limits general API operations to <strong>120 requests per minute</strong>, safeguarding against automated scraping or denial-of-service attempts.</li>
+    </ul>
+
+    <h2>5.3 Real-Time Server-Sent Events (SSE) Hub</h2>
+    <p>
+      Instead of introducing heavy WebSocket connection overhead, Khata utilizes lightweight <strong>Server-Sent Events (SSE)</strong> at <code class="inline">GET /api/kitchen/:groupId/events</code> to stream real-time updates to connected roommates:
+    </p>
+    <pre>
+// Server-Sent Events implementation in server/server.js
+const sseClients = new Map(); // groupId -> Set&lt;Response&gt;
+
+app.get("/api/kitchen/:groupId/events", authenticateToken, requireKitchenMember(), (req, res) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.flushHeaders();
+
+  if (!sseClients.has(groupId)) sseClients.set(groupId, new Set());
+  sseClients.get(groupId).add(res);
+
+  // Periodic heartbeat every 30 seconds to maintain connection through NAT firewalls
+  const heartbeat = setInterval(() => {
+    try { res.write(": ping\\n\\n"); } catch { clearInterval(heartbeat); }
+  }, 30000);
+
+  req.on("close", () => {
+    clearInterval(heartbeat);
+    sseClients.get(groupId)?.delete(res);
+  });
+});
+    </pre>
+
+    <h2>5.4 Complete REST API Endpoints Reference</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Method & Route</th>
+          <th>Auth Required</th>
+          <th>Description & Payload</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code class="inline">POST /api/auth/register</code></td>
+          <td>Public</td>
+          <td>Registers user with phone/email, name, shop name, and bcrypt-hashed password.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">POST /api/auth/login</code></td>
+          <td>Public</td>
+          <td>Authenticates credentials, returns signed JWT token and user profile object.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">POST /api/auth/forgot-password</code></td>
+          <td>Public</td>
+          <td>Generates a 6-digit OTP code with 15-minute expiration for password reset.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">POST /api/auth/reset-password</code></td>
+          <td>Public</td>
+          <td>Validates OTP code and commits new password hash to user profile.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">GET /api/personal</code></td>
+          <td>Bearer Token</td>
+          <td>Fetches the authenticated user's complete ledger, customers, and cashbook data.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">POST /api/personal/sync</code></td>
+          <td>Bearer Token</td>
+          <td>Atomically synchronizes updated customers, transactions, or cashbook records.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">POST /api/kitchen/create</code></td>
+          <td>Bearer Token</td>
+          <td>Creates a new shared kitchen group, assigns owner role, and generates join code.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">POST /api/kitchen/join</code></td>
+          <td>Bearer Token</td>
+          <td>Joins existing kitchen group via 6-character uppercase join code.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">POST /api/kitchen/:groupId/sync</code></td>
+          <td>Member Token</td>
+          <td>Updates group roster or cashbook; broadcasts live SSE event to all connected members.</td>
+        </tr>
+        <tr>
+          <td><code class="inline">POST /api/kitchen/:groupId/member/toggle-pause</code></td>
+          <td>Member Token</td>
+          <td>Toggles member status between active and paused (for vacation/absence).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==================== PAGE 4: FRONTEND ARCHITECTURE & STATE ==================== -->
+  <div class="page" style="padding-top: 10px;">
+    <h1>6. Frontend Architecture & State Management</h1>
+    <p>
+      Khata's frontend is constructed using <strong>React 19</strong>, <strong>Vite 8</strong>, and <strong>Tailwind CSS 4</strong>. The design philosophy centers around high responsiveness, tactile mobile feedback, and clear domain separation.
+    </p>
+
+    <h2>6.1 Triple Context Architecture</h2>
+    <p>
+      To prevent monolithic state bloat and eliminate unwanted cross-component re-renders, application state is divided into three distinct React Context layers:
+    </p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3><span>1. AuthContext</span> <span class="tag">Security</span></h3>
+        <p>
+          Manages user authentication lifecycle, JWT token persistence in LocalStorage, login/register mutations, and the client-side PIN security lockscreen (<code class="inline">isLocked</code>).
+        </p>
+      </div>
+      <div class="feature-card">
+        <h3><span>2. PersonalContext</span> <span class="tag">Ledger</span></h3>
+        <p>
+          Encapsulates private shop/individual ledger data: customer records, udhar/jama transactions, daily cashbook, and business profile. Employs user-scoped localStorage keys (<code class="inline">khata_{userId}_{key}</code>) for offline reliability.
+        </p>
+      </div>
+      <div class="feature-card">
+        <h3><span>3. KitchenContext</span> <span class="tag">Realtime</span></h3>
+        <p>
+          Manages collaborative kitchen groups, roommate memberships, duty rosters, and shared cashbook expenses. Subscribes to the live SSE stream with an automatic heartbeat and fallback polling mechanism.
+        </p>
+      </div>
+      <div class="feature-card">
+        <h3><span>4. Offline-First Resilience</span> <span class="tag">Reliability</span></h3>
+        <p>
+          If network connectivity drops or the cloud server is unreachable, the app automatically transitions to local cache mode, rendering an amber status banner while queuing changes for synchronization.
+        </p>
+      </div>
+    </div>
+
+    <h2>6.2 Core UI View Hierarchy & Routing</h2>
+    <p>
+      Rather than relying on bulky URL routers that add bundle size in mobile environments, Khata utilizes a responsive state-driven view controller within <code class="inline">src/App.jsx</code>:
+    </p>
+    <ul>
+      <li><strong>Dashboard (<code class="inline">DashboardView.jsx</code>):</strong> Financial summary cards (Total to Collect, Total to Pay, Daily Cash balance), customer search and filtering bar, quick transaction launchers, and customer list.</li>
+      <li><strong>Customer Ledger Detail (<code class="inline">CustomerDetail.jsx</code>):</strong> Drill-down view into an individual customer's transaction history, WhatsApp reminder triggers, and PDF account statement download.</li>
+      <li><strong>Cashbook Register (<code class="inline">CashbookView.jsx</code>):</strong> Running daily ledger of cash income and cash expenses with running cash-in-hand calculation.</li>
+      <li><strong>Turn Tracker (<code class="inline">TurnTrackerView.jsx</code>):</strong> Duty manager displaying whose turn it is next for cooking, cleaning, or grocery shopping with WhatsApp rotation alerts.</li>
+      <li><strong>Dynamic QR & Pay (<code class="inline">QRPayView.jsx</code>):</strong> Real-time SVG payment QR code generation with dynamic amount and merchant UPI parameters.</li>
+      <li><strong>Financial Reports (<code class="inline">ReportsView.jsx</code>):</strong> Statements hub allowing one-click export of complete PDF statements or Excel-compatible CSV balance sheets.</li>
+      <li><strong>Settings & Security (<code class="inline">SettingsView.jsx</code>):</strong> Business branding configuration, PIN lock setup, language toggle (English/Hindi), and JSON data backup/restore.</li>
+    </ul>
+
+    <h2>6.3 Design Tokens & Styling (Tailwind CSS 4)</h2>
+    <p>
+      The user interface uses a tailored color palette specifically optimized for financial clarity:
+    </p>
+    <ul>
+      <li><strong>Emerald Green (<code class="inline">#10b981 / #059669</code>):</strong> Denotes Jama (payments received), positive cash inflow, and credit assets.</li>
+      <li><strong>Rose Red (<code class="inline">#ef4444 / #dc2626</code>):</strong> Denotes Udhar (credit extended), pending customer liabilities, and cash outflows.</li>
+      <li><strong>Slate Dark (<code class="inline">#0f172a / #1e293b</code>):</strong> Used for high-contrast header cards, elevated modal sheets, and tab navigation.</li>
+      <li><strong>Tactile Micro-interactions:</strong> Active scaling (<code class="inline">active:scale-95</code>), smooth CSS transitions, and celebratory confetti animations (<code class="inline">canvas-confetti</code>) when full payments are settled.</li>
+    </ul>
+  </div>
+
+  <!-- ==================== PAGE 5: CORE BUSINESS LOGIC & ALGORITHMS ==================== -->
+  <div class="page" style="padding-top: 10px;">
+    <h1>7. Core Business Logic & Algorithms</h1>
+
+    <h2>7.1 Double-Entry Balance Calculation Engine</h2>
+    <p>
+      At the heart of Khata is the balance calculation algorithm implemented in <code class="inline">src/utils/formatters.js</code>. For any customer account, transactions are categorized into two types:
+    </p>
+    <ul>
+      <li><strong>Gave (Udhar):</strong> Credit extended to the customer (they owe you money).</li>
+      <li><strong>Got (Jama):</strong> Payment received from the customer (they paid you money).</li>
+    </ul>
+    <pre>
+export const calculateCustomerBalance = (transactions = []) => {
+  let totalGave = 0; // Udhar given by shopkeeper
+  let totalGot = 0;  // Jama paid by customer
+
+  for (const tx of transactions) {
+    const amt = Number(tx.amount || 0);
+    if (tx.type === "gave") totalGave += amt;
+    else if (tx.type === "got") totalGot += amt;
+  }
+
+  const diff = totalGave - totalGot;
+
+  if (diff > 0) {
+    return { balance: diff, status: "get" };     // Shopkeeper will collect money (Asset)
+  } else if (diff < 0) {
+    return { balance: Math.abs(diff), status: "give" }; // Customer has advance credit (Liability)
+  }
+  return { balance: 0, status: "settled" };      // Account is fully settled
+};
+    </pre>
+
+    <h2>7.2 Turn Tracker Round-Robin Rotation Algorithm</h2>
+    <p>
+      In shared flats or hostel groups, roommates share duties such as cooking, grocery shopping, or water can refills. The turn progression algorithm guarantees fair rotation while skipping members who are temporarily marked as <code class="inline">paused</code> (e.g. traveling or on leave):
+    </p>
+    <pre>
+function advanceDutyTurn(dutyItem, members) {
+  const activeMembers = dutyItem.memberIds
+    .map(id => members.find(m => m.id === id || m.userId === id))
+    .filter(m => m && m.status !== "paused"); // Skip absent/paused roommates
+
+  if (activeMembers.length === 0) return dutyItem;
+
+  const nextIndex = (dutyItem.currentTurnIndex + 1) % activeMembers.length;
+  const currentPerson = activeMembers[dutyItem.currentTurnIndex % activeMembers.length];
+
+  return {
+    ...dutyItem,
+    currentTurnIndex: nextIndex,
+    lastBroughtBy: currentPerson.name,
+    lastBroughtDate: new Date().toISOString(),
+    history: [
+      { person: currentPerson.name, date: new Date().toISOString() },
+      ...(dutyItem.history || [])
+    ]
+  };
+}
+    </pre>
+
+    <h2>7.3 Shared Bill Splitting & Ledger Auto-Injection</h2>
+    <p>
+      When an expense occurs in a kitchen group (e.g. a ₹1,200 grocery bill), the split calculator automatically computes the per-person liability (<code class="inline">Math.round(total / count)</code>) and gives the user the option to automatically log an Udhar transaction into each member's personal ledger with a single click.
+    </p>
+
+    <h2>7.4 Dynamic UPI Intent & QR Code Protocol</h2>
+    <p>
+      Khata integrates the standard National Payments Corporation of India (NPCI) UPI Intent specification. In <code class="inline">QRPayView.jsx</code>, payment links are assembled according to the standard URI scheme:
+    </p>
+    <pre>
+upi://pay?pa={merchantUpiId}&pn={encode(businessName)}&am={amount}&cu=INR&tn={encode(note)}
+    </pre>
+    <p>
+      This URI is fed directly into <code class="inline">qrcode.react</code> to generate a crisp vector QR code compatible with Google Pay, PhonePe, Paytm, BHIM, and all mobile banking applications.
+    </p>
+
+    <h2>7.5 Client-Side Vector PDF Engine (<code class="inline">jspdf</code> + <code class="inline">jspdf-autotable</code>)</h2>
+    <p>
+      Unlike apps that rely on slow server-side rendering pipelines (like Puppeteer), Khata renders complete financial statements directly in the browser using client-side JavaScript. This enables instant statement generation even when completely offline:
+    </p>
+    <ul>
+      <li>Creates branded vector headers with merchant business name, address, GSTIN, and phone number.</li>
+      <li>Calculates summary boxes highlighting net receivables vs. payables.</li>
+      <li>Constructs styled data tables with alternating row shading, date formatters, and totals footers.</li>
+      <li>Exports clean, print-ready PDF files directly into the user's downloads folder.</li>
+    </ul>
+  </div>
+
+  <!-- ==================== PAGE 6: HYBRID PACKAGING, BUILD & DEPLOYMENT ==================== -->
+  <div class="page" style="padding-top: 10px;">
+    <h1>8. Mobile Native Shell & Packaging (Android APK)</h1>
+    <p>
+      Khata is engineered to run seamlessly as both a responsive web application and a native Android APK. This is achieved using <strong>Capacitor 6</strong>.
+    </p>
+
+    <h2>8.1 Capacitor Bridge Architecture</h2>
+    <p>
+      Capacitor bridges the React web bundle (<code class="inline">dist/</code>) inside a native Android <code class="inline">WebView</code> wrapper, providing native runtime performance without requiring a separate React Native rewrite:
+    </p>
+    <ul>
+      <li><code class="inline">capacitor.config.json</code>: Declares the native package ID (<code class="inline">com.khata.app</code>), application title, and assets source directory.</li>
+      <li><code class="inline">android/</code> Directory: Fully configured Android Studio project featuring <code class="inline">MainActivity.java</code> and Gradle build scripts.</li>
+      <li><strong>Hardware Permissions:</strong> Android manifest enables camera access (<code class="inline">android.permission.CAMERA</code>) for scanning UPI and invite QR codes, alongside storage and network state permissions.</li>
+    </ul>
+
+    <h2>8.2 Automated 3-Stage APK Build Pipeline</h2>
+    <p>
+      Building the Android APK is entirely automated via <code class="inline">Build-Android-APK.bat</code>:
+    </p>
+    <pre>
+# Stage 1: Build production web bundle via Vite
+call npm run build
+
+# Stage 2: Sync web assets into native Android directory
+call npx cap sync android
+
+# Stage 3: Compile debug APK via Gradle Wrapper
+cd android
+call gradlew.bat assembleDebug
+
+# Output APK: android/app/build/outputs/apk/debug/app-debug.apk
+    </pre>
+
+    <h1>9. DevOps, Deployment & Production Readiness</h1>
+    <p>
+      The application is configured with multi-cloud deployment scripts for hosting the frontend and containerizing the backend:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Target Environment</th>
+          <th>Configuration File</th>
+          <th>Deployment Workflow</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Docker / Compose</strong></td>
+          <td><code class="inline">Dockerfile</code>, <code class="inline">compose.yaml</code></td>
+          <td>Containerizes the Node.js API with health checks and environment variable injection.</td>
+        </tr>
+        <tr>
+          <td><strong>Render Cloud</strong></td>
+          <td><code class="inline">render.yaml</code></td>
+          <td>Deploys the production API web service with continuous deployment from GitHub.</td>
+        </tr>
+        <tr>
+          <td><strong>Firebase Hosting</strong></td>
+          <td><code class="inline">firebase.json</code>, <code class="inline">Deploy-Firebase.bat</code></td>
+          <td>Builds the optimized web bundle and pushes to Firebase's global CDN with SPA rewrite rules.</td>
+        </tr>
+        <tr>
+          <td><strong>Local Development</strong></td>
+          <td><code class="inline">Start-Khata.bat</code></td>
+          <td>Concurrently spawns the backend server (Port 5000) and the Vite development server (Port 5173).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h1>10. Step-by-Step Blueprint: How to Rebuild This App</h1>
+    <ol>
+      <li><strong>Initialize Project:</strong> Scaffold a React + Vite application with TypeScript and Tailwind CSS v4.</li>
+      <li><strong>Configure Backend Server:</strong> Set up Express 5 with CORS, Rate Limiting, and MongoDB Mongoose connection.</li>
+      <li><strong>Implement Authentication:</strong> Build User schema with Bcrypt password hashing and JWT token issuance.</li>
+      <li><strong>Construct Personal Ledger Context:</strong> Implement double-entry calculations (<code class="inline">gave</code> / <code class="inline">got</code>) with user-scoped LocalStorage synchronization.</li>
+      <li><strong>Build Core UI Screens:</strong> Create Dashboard, Customer Details, Add Entry modals, and Cashbook register.</li>
+      <li><strong>Implement Kitchen Group & SSE:</strong> Build shared space models and Server-Sent Events broadcasting for flatmates.</li>
+      <li><strong>Integrate PDF & QR Engines:</strong> Implement <code class="inline">jspdf</code> report generation and dynamic UPI payment QR codes.</li>
+      <li><strong>Wrap with Capacitor:</strong> Initialize Capacitor Android wrapper and compile the native APK using Gradle.</li>
+    </ol>
+
+    <div class="callout callout-blue" style="margin-top: 18px;">
+      <div class="callout-title">Summary & Engineering Takeaway</div>
+      The Khata application demonstrates how modern web technologies (React 19, Vite, Tailwind CSS 4) can be paired with an efficient Node.js/Express/MongoDB backend and wrapped in Capacitor to deliver a robust, cross-platform financial application that runs seamlessly on web, desktop, and mobile devices.
+    </div>
+  </div>
+
+</body>
+</html>
+`;
+
+fs.writeFileSync(htmlPath, htmlContent, "utf8");
+console.log(`HTML guide written to ${htmlPath}`);
+
+// Compile to PDF using headless Chrome
+console.log("Invoking Chrome headless to generate high-resolution PDF...");
+const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+
+try {
+  const cmd = `"${chromePath}" --headless=new --disable-gpu --print-to-pdf="${pdfPath}" --no-pdf-header-footer "${htmlPath}"`;
+  execSync(cmd, { stdio: "inherit" });
+  
+  if (fs.existsSync(pdfPath)) {
+    const stats = fs.statSync(pdfPath);
+    console.log(`\nSUCCESS! PDF generated successfully:`);
+    console.log(`File: ${pdfPath}`);
+    console.log(`Size: ${(stats.size / 1024).toFixed(1)} KB`);
+  } else {
+    console.error("PDF file was not created.");
+  }
+} catch (err) {
+  console.error("Error generating PDF with Chrome:", err);
+}

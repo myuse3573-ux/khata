@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/useAuth";
-import { Lock, Phone, Mail, User, Store, ShieldCheck, ArrowRight, KeyRound, Sparkles, RefreshCw, CheckCircle2, ArrowLeft, UserPlus } from "lucide-react";
+import { Lock, Phone, Mail, User, Store, ShieldCheck, ArrowRight, KeyRound, Sparkles, RefreshCw, CheckCircle2, ArrowLeft, UserPlus, Globe2 } from "lucide-react";
 
 export const LoginView = () => {
-  const { login, register, forgotPassword, resetPassword, loginAsDemo, authError, isLoading, setAuthError } = useAuth();
+  const { login, loginWithGoogle, register, forgotPassword, resetPassword, loginAsDemo, authError, isLoading, setAuthError } = useAuth();
   const [mode, setMode] = useState("login"); // 'login' | 'register' | 'forgot' | 'reset'
 
   // Form states
@@ -262,6 +262,16 @@ export const LoginView = () => {
               >
                 <span>{isLoading ? "Signing in..." : "Secure Login"}</span>
                 <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={loginWithGoogle}
+                disabled={isLoading}
+                className="w-full bg-white hover:bg-slate-100 text-slate-900 font-extrabold py-3 rounded-2xl shadow-xl flex items-center justify-center gap-2 text-sm transition-all disabled:opacity-50"
+              >
+                <Globe2 className="w-4 h-4" />
+                <span>{isLoading ? "Connecting..." : "Continue with Google"}</span>
               </button>
             </form>
           )}

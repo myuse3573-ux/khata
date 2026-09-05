@@ -38,7 +38,7 @@ if (isFirebaseConfigured()) {
     db = getFirestore(app);
     auth = getAuth(app);
     storage = getStorage(app);
-    console.log("[Firebase] Successfully initialized with project:", firebaseConfig.projectId);
+    console.log("[Firebase] Successfully initialized.");
   } catch (error) {
     console.error("[Firebase] Initialization error:", error);
   }
